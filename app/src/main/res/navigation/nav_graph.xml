@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/fragmentList">
+
+
+    <fragment
+        android:id="@+id/fragmentList"
+        android:name="com.wuujcik.todolist.ui.list.ListFragment"
+        android:label="FragmentList"
+        tools:layout="@layout/fragment_list">
+        <action
+            android:id="@+id/action_listFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment">
+        </action>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.wuujcik.todolist.ui.details.DetailsFragment"
+        android:label="DetailsFragment"
+        tools:layout="@layout/fragment_details" >
+        <argument
+            android:name="data"
+            app:argType="com.wuujcik.todolist.model.Todo"
+            app:nullable="true"
+            />
+
+    </fragment>
+</navigation>

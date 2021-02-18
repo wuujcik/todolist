@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Todo" />
+
+    <style name="Todo.Toolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="titleTextAppearance">?attr/textAppearanceHeadline6</item>
+        <item name="titleTextColor">?attr/colorOnPrimary</item>
+        <item name="subtitleTextAppearance">?attr/textAppearanceSubtitle1</item>
+        <item name="android:minHeight">@dimen/mtrl_toolbar_default_height</item>
+        <item name="maxButtonHeight">@dimen/mtrl_toolbar_default_height</item>
+        <item name="android:textColorSecondary">#1f0103</item>
+    </style>
+
+    <style name="Todo.Button"  parent="Widget.MaterialComponents.Button" >
+        <item name="android:layout_margin">@dimen/standard_margin</item>
+    </style>
+
+
+    <style name="Todo.RecyclerList" >
+        <item name="android:layout_margin">@dimen/micro_margin</item>
+        <item name="android:background">?attr/backgroundColor</item>
+    </style>
+
+    <style name="Todo.RecyclerList.Title" >
+        <item name="android:layout_margin">@dimen/small_margin</item>
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Subtitle1</item>
+        <item name="android:textColor">?attr/colorOnBackground</item>
+        <item name="android:paddingTop">@dimen/inner_padding</item>
+    </style>
+
+    <style name="Todo.RecyclerList.Date" >
+        <item name="android:layout_margin">@dimen/small_margin</item>
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Body2</item>
+        <item name="android:textColor">?attr/colorOnBackground</item>
+        <item name="android:paddingBottom">@dimen/inner_padding</item>
+    </style>
+
+    <style name="Todo.RecyclerList.Icon" >
+        <item name="android:layout_margin">@dimen/small_margin</item>
+    </style>
+
+
+    <style name="Todo.RecyclerList.FloatingButton" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="maxImageSize">@dimen/fab_icon_size</item>
+        <item name="fabCustomSize">@dimen/fab_size</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:scaleType">center</item>
+        <item name="tint">?attr/colorOnPrimary</item>
+        <item name="android:layout_margin">@dimen/margin_floating_button</item>
+        <item name="backgroundTint">?attr/colorPrimary</item>
+    </style>
+
+
+    <style name="Todo.Details" >
+        <item name="android:background">?attr/background</item>
+    </style>
+
+
+    <style name="Todo.Details.Title" >
+
+    </style>
+
+    <style name="Todo.Details.Layout" >
+        <item name="hintTextColor">?attr/colorOnPrimary</item>
+        <item name="android:textColorHint">?attr/colorSecondary</item>
+    </style>
+
+    <style name="Todo.Details.Description" >
+
+    </style>
+
+
+    <style name="Todo.Details.Icon" >
+
+    </style>
+
+
+</resources>
