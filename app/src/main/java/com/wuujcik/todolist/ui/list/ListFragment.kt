@@ -5,8 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.*
@@ -14,33 +14,27 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.wuujcik.todolist.R
 import com.wuujcik.todolist.model.Todo
-import com.wuujcik.todolist.ui.MainViewModel
-import com.wuujcik.todolist.ui.MainViewModelFactory
-import com.wuujcik.todolist.utils.getApplication
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_list.*
-import java.util.*
+import kotlin.system.measureNanoTime
 
 
 class ListFragment : Fragment() {
 
-    private lateinit var mainViewModel: MainViewModel
-    private lateinit var mainViewModelFactory: MainViewModelFactory
+    private lateinit var firebaseDb: FirebaseDatabase
+    private lateinit var itemsReference: DatabaseReference
+    private var itemsEventListener: ChildEventListener? = null
 
+    private lateinit var todoListAdapter: TodoListAdapter
+    private val firebaseList = mutableListOf<Todo?>()
 
-    private var firebaseDb: FirebaseDatabase? = null
-    private var itemsReference: DatabaseReference? = null
-    private var childEventListener: ChildEventListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mainViewModelFactory = MainViewModelFactory(getApplication())
-        mainViewModel = ViewModelProvider(this, mainViewModelFactory)
-            .get(MainViewModel::class.java)
         firebaseDb = Firebase.database
-        itemsReference = firebaseDb?.reference?.child(ITEMS_KEY)
+        itemsReference = firebaseDb.reference.child(ITEMS_KEY)
 
         return inflater.inflate(R.layout.fragment_list, container, false)
     }
@@ -48,16 +42,20 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setListAdapter()
-        attachDatabaseReadListener()
+        attachDatabaseReadListeners()
 
         create_new_item.setOnClickListener {
-            findNavController().navigate(ListFragmentDirections.actionListFragmentToDetailsFragment(null))
+            findNavController().navigate(
+                ListFragmentDirections.actionListFragmentToDetailsFragment(
+                    null
+                )
+            )
         }
     }
 
 
     private fun setListAdapter() {
-        val todoListAdapter = TodoListAdapter()
+        todoListAdapter = TodoListAdapter(firebaseList, context, itemsReference)
         todoListAdapter.onItemClicked = { data ->
             findNavController().navigate(
                 ListFragmentDirections.actionListFragmentToDetailsFragment(data)
@@ -67,50 +65,64 @@ class ListFragment : Fragment() {
             list_recycler_viewer.adapter = todoListAdapter
             list_recycler_viewer.layoutManager = LinearLayoutManager(it)
         }
-
-
-        val firebaseList = mutableListOf<Todo>()
-        firebaseList.add(Todo("tytuł", "opis", Date().time))
-        firebaseList.add(Todo("kasza", "opis", Date().time))
-        firebaseList.add(Todo("skarpety", "opis", Date().time))
-
         progress_bar_overlay?.visibility = View.GONE
-        todoListAdapter.submitList(firebaseList)
-
     }
 
 
-    private fun attachDatabaseReadListener() {
-        if (childEventListener == null) {
+    private fun attachDatabaseReadListeners() {
+        if (itemsEventListener == null) {
             //  create and attach read listener
-            childEventListener = object : ChildEventListener {
+            itemsEventListener = object : ChildEventListener {
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                     val item = snapshot.getValue(Todo::class.java)
-                    Log.e("DEBUGGING", "ListFragment, onChildAdded: new item = $item")
+                    if (item !in firebaseList) {
+                        firebaseList.add(item)
+                    }
+                    todoListAdapter.notifyDataSetChanged()
                 }
 
                 override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                    val item = snapshot.getValue(Todo::class.java)
-                    Log.e("DEBUGGING", "ListFragment, onChildChanged: changed item = $item")
+                    // An item has changed, use the key to determine if we are displaying this
+                    // item and if so displayed the changed comment.
+                    val updatedTodo = snapshot.getValue(Todo::class.java)
+
+                    snapshot.key?.let { key ->
+                        val index = getIndexForKey(key)
+                        firebaseList[index] = updatedTodo
+                        todoListAdapter.notifyItemChanged(index)
+                    }
+
+                    todoListAdapter.notifyDataSetChanged()
                 }
+
                 override fun onChildRemoved(snapshot: DataSnapshot) {
-                    val item = snapshot.getValue(Todo::class.java)
-                    Log.e("DEBUGGING", "ListFragment, onChildRemoved: removed item = $item")
+                    // An item has changed, use the key to determine if we are displaying this
+                    // item and if so remove it.
+                    snapshot.key?.let { key ->
+                        val index = getIndexForKey(key)
+                        firebaseList.removeAt(index)
+                        todoListAdapter.notifyItemChanged(index)
+                    }
                 }
+
                 override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
-                override fun onCancelled(error: DatabaseError) {}
+                override fun onCancelled(error: DatabaseError) {
+                    // Failed to read value
+                    Log.w(TAG, "Failed to read value. Error: $error")
+                    Toast.makeText(context, R.string.failed_to_load_todos, Toast.LENGTH_SHORT).show()
+                }
             }
         }
-        childEventListener?.let {
-            itemsReference?.addChildEventListener(it)
+        itemsEventListener?.let {
+            itemsReference.addChildEventListener(it)
         }
     }
 
     private fun detachDatabaseReadListener() {
-        childEventListener?.let {
-            itemsReference?.removeEventListener(it)
+        itemsEventListener?.let {
+            itemsReference.removeEventListener(it)
         }
-        childEventListener = null
+        itemsEventListener = null
     }
 
 
@@ -119,8 +131,20 @@ class ListFragment : Fragment() {
         detachDatabaseReadListener()
     }
 
+    private fun getIndexForKey(key: String): Int {
+        var index = 0
+        for (item in firebaseList) {
+            if (item?.timestamp.toString().equals(key)) {
+                return index
+            } else {
+                index++
+            }
+        }
+        return -1
+    }
 
-    companion object{
+
+    companion object {
         const val TAG = "ListFragment"
         const val ITEMS_KEY = "items"
     }

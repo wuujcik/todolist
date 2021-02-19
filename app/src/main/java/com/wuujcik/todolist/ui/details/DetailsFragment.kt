@@ -48,13 +48,44 @@ class DetailsFragment : Fragment() {
 
     private fun saveItem(){
         if(isValid()){
-            val todo = Todo(title.text.toString().trim(), description.text.toString().trim(), Date().time, icon.text.toString().trim())
-            itemReference?.push()?.setValue(todo)
+            val timestamp = Date().time
+            val todo = Todo(title.text.toString().trim(), description.text.toString().trim(), timestamp, icon.text.toString().trim())
+            itemReference?.child(timestamp.toString())?.setValue(todo)
             findNavController().navigateUp()
         }
     }
 
     private fun isValid() : Boolean{
-        return true
+        var isValid = true
+
+        when {
+             title.text.toString().trim().isEmpty() -> {
+                 title_layout.error = getString(R.string.error_field_empty)
+                isValid = false
+            }
+            title.text.toString().trim().length > 30 -> {
+                title_layout.error = getString(R.string.error_field_too_long)
+                isValid = false
+            }
+            else -> {
+                title_layout.error = null
+            }
+        }
+
+        when {
+            description.text.toString().trim().isEmpty() -> {
+                description_layout.error = getString(R.string.error_field_empty)
+                isValid = false
+            }
+            title.text.toString().trim().length > 200 -> {
+                description_layout.error = getString(R.string.error_field_too_long)
+                isValid = false
+            }
+            else -> {
+                description_layout.error = null
+            }
+        }
+
+        return isValid
     }
 }

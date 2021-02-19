@@ -1,17 +1,22 @@
 package com.wuujcik.todolist.ui.list
 
+import android.app.AlertDialog
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.DatabaseReference
 import com.wuujcik.todolist.R
 import com.wuujcik.todolist.model.Todo
 import com.wuujcik.todolist.utils.formatShortDate
 import kotlinx.android.synthetic.main.item_todo.view.*
 
-class TodoListAdapter : ListAdapter<Todo, TodoListAdapter.ViewHolder>(diffCallback) {
+class TodoListAdapter(
+    val items: MutableList<Todo?>,
+    val context: Context?,
+    val ref: DatabaseReference
+) : RecyclerView.Adapter<TodoListAdapter.ViewHolder>() {
 
     /** Callback when user click on holder */
     var onItemClicked: (item: Todo) -> Unit = {}
@@ -24,38 +29,50 @@ class TodoListAdapter : ListAdapter<Todo, TodoListAdapter.ViewHolder>(diffCallba
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position)
-        holder.bind(item, onItemClicked)
+        val item = items[position]
+        item?.let {
+            holder.bind(it, onItemClicked)
+        }
+    }
+
+    override fun getItemCount(): Int {
+        return items.size
     }
 
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(todo: Todo, listener: (Todo) -> Unit) = with(itemView) {
-            title.text = todo.title
-            todo.timestamp?.let { date ->
+        fun bind(item: Todo, listener: (Todo) -> Unit) = with(itemView) {
+            title.text = item.title
+            item.timestamp?.let { date ->
                 date_created.text = formatShortDate(context, date)
             }
-
-            setOnClickListener { listener(todo) }
+            setOnLongClickListener {
+                handleLongClick(item)
+                true
+            }
+            //TODO: set the icon
+            setOnClickListener { listener(item) }
         }
 
-
+        private fun handleLongClick(item: Todo) {
+            AlertDialog.Builder(context)
+                .setTitle(R.string.delete)
+                .setMessage(R.string.delete_confirm_text)
+                .setNegativeButton(R.string.yes) { _, _ ->
+                    ref.child(item.timestamp.toString()).removeValue()
+                    items.remove(item)
+                    notifyDataSetChanged()
+                }
+                .setNeutralButton(R.string.button_cancel) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+        }
     }
 
 
     companion object {
         const val TAG = "TodoListAdapter"
-        var diffCallback: DiffUtil.ItemCallback<Todo> =
-            object : DiffUtil.ItemCallback<Todo>() {
-
-                override fun areItemsTheSame(oldItem: Todo, newItem: Todo): Boolean {
-                    return oldItem.timestamp == newItem.timestamp
-                }
-
-                override fun areContentsTheSame(oldItem: Todo, newItem: Todo): Boolean {
-                    return oldItem.equals(newItem)
-                }
-            }
     }
 }
