@@ -65,7 +65,7 @@ class ListFragment : Fragment() {
             list_recycler_viewer.adapter = todoListAdapter
             list_recycler_viewer.layoutManager = LinearLayoutManager(it)
         }
-        progress_bar_overlay?.visibility = View.GONE
+        progress_bar_overlay?.visibility = View.GONE  //TODO: show it at some point
     }
 
 

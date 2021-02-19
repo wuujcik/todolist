@@ -14,6 +14,7 @@
 
     <style name="Todo.Button"  parent="Widget.MaterialComponents.Button" >
         <item name="android:layout_margin">@dimen/standard_margin</item>
+        <item name="backgroundTint">?attr/colorAccent</item>
     </style>
 
 
@@ -49,7 +50,7 @@
         <item name="android:scaleType">center</item>
         <item name="tint">?attr/colorOnPrimary</item>
         <item name="android:layout_margin">@dimen/margin_floating_button</item>
-        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="backgroundTint">?attr/colorAccent</item>
     </style>
 
 
@@ -76,5 +77,6 @@
 
     </style>
 
+    <attr name="icon_placeholder" format="reference"/>
 
 </resources>

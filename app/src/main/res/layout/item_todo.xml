@@ -5,32 +5,34 @@
     style="@style/Todo.RecyclerList"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/micro_margin"
-    >
+    android:layout_marginBottom="@dimen/micro_margin">
 
     <ImageView
         android:id="@+id/icon"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:contentDescription="icon"
         style="@style/Todo.RecyclerList.Icon"
-        app:layout_constraintBottom_toBottomOf="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="50dp"
+        android:minHeight="50dp"
+        android:contentDescription="icon"
+        android:src="?attr/icon_placeholder"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintEnd_toEndOf="@+id/guideline1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/title"
-        tools:src="@drawable/ic_launcher_foreground" />
+        app:layout_constraintTop_toTopOf="parent"
+       />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"
         style="@style/Todo.RecyclerList.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/date_created"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline1"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/date_created"
         tools:text="Buy peanut butter" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -38,11 +40,11 @@
         style="@style/Todo.RecyclerList.Date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline1"
         app:layout_constraintTop_toBottomOf="@+id/title"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         tools:text="2020-02-18" />
 
 

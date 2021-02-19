@@ -4,6 +4,8 @@
         <item name="colorPrimary">@color/light_color_primary</item>
         <item name="colorPrimaryVariant">@color/light_color_primary_variant</item>
         <item name="colorOnPrimary">@color/light_color_on_primary</item>
+        <item name="colorAccent">@color/light_color_accent</item>
+
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/light_color_secondary</item>
         <item name="colorSecondaryVariant">@color/light_color_secondary_variant</item>
@@ -17,6 +19,9 @@
         <item name="toolbarStyle">@style/ToolbarStyle</item>
         <item name="backgroundColor">@color/light_color_for_tiles</item>
         <item name="background">?attr/colorOnSecondary</item>
+
+        <item name="icon_placeholder">@drawable/ic_placeholder_light_theme</item>
+
     </style>
 
     <style name="ToolbarStyle" parent="@style/Widget.AppCompat.Toolbar">
