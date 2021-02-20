@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.list.MainActivity">
 
-    <item
-        android:id="@+id/menu_settings"
-        android:title="@string/drawer_settings"
-        app:showAsAction="never"/>
-    <item
-        android:id="@+id/menu_about"
-        android:title="@string/drawer_about"
-        app:showAsAction="never"/>
+<!--    <item-->
+<!--        android:id="@+id/menu_settings"-->
+<!--        android:title="@string/drawer_settings"-->
+<!--        app:showAsAction="never"/>-->
+<!--    <item-->
+<!--        android:id="@+id/menu_about"-->
+<!--        android:title="@string/drawer_about"-->
+<!--        app:showAsAction="never"/>-->
 </menu>

@@ -11,7 +11,7 @@
     <!-- item details -->
     <string name="title_hint">Set your task</string>
     <string name="description_hint">Add description</string>
-    <string name="icon_hint">Add icon</string>
+    <string name="icon_hint">Add icon url address</string>
 
     <!-- list -->
     <string name="failed_to_load_todos">Failed to load the list.</string>
@@ -22,5 +22,6 @@
     <string name="yes">yes</string>
     <string name="error_field_empty">Cannot be empty</string>
     <string name="error_field_too_long">Text is too long</string>
+    <string name="add_items_to_your_list">Add items to your list</string>
 
 </resources>

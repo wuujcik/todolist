@@ -1,66 +1,77 @@
 package com.wuujcik.todolist.ui.details
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import com.wuujcik.todolist.R
-import com.wuujcik.todolist.model.Todo
-import com.wuujcik.todolist.ui.list.ListFragment
+import com.wuujcik.todolist.persistence.Todo
+import com.wuujcik.todolist.model.TodoProvider
+import com.wuujcik.todolist.utils.getApplication
 import kotlinx.android.synthetic.main.fragment_details.*
 import java.util.*
 
 class DetailsFragment : Fragment() {
 
-    var item: Todo? = null
+    var originalItem: Todo? = null
     val args: DetailsFragmentArgs by navArgs()
-    private var firebaseDb: FirebaseDatabase? = null
-    private var itemReference: DatabaseReference? = null
+    private var editingMode = false
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    private val todoProvider: TodoProvider
+        get() {
+            return TodoProvider(getApplication())
+        }
 
-        firebaseDb = Firebase.database
-        itemReference = firebaseDb?.reference?.child(ListFragment.ITEMS_KEY)
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_details, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        item = args.data
-        title.setText(item?.title)
-        description.setText(item?.description)
-        icon.setText(item?.iconUrl)
-
+        originalItem = args.data
+        originalItem?.let { item ->
+            editingMode = true
+            title.setText(item.title)
+            description.setText(item.description)
+            icon.setText(item.iconUrl)
+        }
         cancelButton.setOnClickListener { findNavController().navigateUp() }
         saveButton.setOnClickListener { saveItem() }
     }
+    
 
-    private fun saveItem(){
-        if(isValid()){
-            val timestamp = Date().time
-            val todo = Todo(title.text.toString().trim(), description.text.toString().trim(), timestamp, icon.text.toString().trim())
-            itemReference?.child(timestamp.toString())?.setValue(todo)
+    private fun saveItem() {
+        val title = title.text.toString().trim()
+        val description = description.text.toString().trim()
+        val iconUrl = icon.text.toString().trim()
+
+        if (isValid() && editingMode) {
+            val timestamp = originalItem?.timestamp ?: return
+            todoProvider.updateItem(Todo(title, description, timestamp, iconUrl))
+            todoProvider.updateItemInFirebase(Todo(title, description, timestamp, iconUrl))
+            findNavController().navigateUp()
+
+        } else if (isValid()) {
+            todoProvider.addItemToFirebase(Todo(title, description, Date().time, iconUrl))
             findNavController().navigateUp()
         }
     }
 
-    private fun isValid() : Boolean{
+
+    private fun isValid(): Boolean {
         var isValid = true
 
         when {
-             title.text.toString().trim().isEmpty() -> {
-                 title_layout.error = getString(R.string.error_field_empty)
+            title.text.toString().trim().isEmpty() -> {
+                title_layout.error = getString(R.string.error_field_empty)
                 isValid = false
             }
             title.text.toString().trim().length > 30 -> {
