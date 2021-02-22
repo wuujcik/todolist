@@ -7,9 +7,7 @@ import android.util.Log
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.wuujcik.todolist.persistence.Repositories
-import com.wuujcik.todolist.persistence.Todo
-import com.wuujcik.todolist.persistence.TodoRepository
+import com.wuujcik.todolist.persistence.*
 import com.wuujcik.todolist.ui.list.ListFragment
 import java.lang.Exception
 
@@ -30,9 +28,9 @@ class TodoProvider(private val context: Context) {
             return firebaseDb.reference.child(ITEMS_KEY)
         }
 
-    private val todoRepository: TodoRepository
+    private val todoDao: TodoDao
         get() {
-            return Repositories(context.applicationContext).todoRepository
+            return TodoDatabase.getDatabase(context.applicationContext).todoDao()
         }
 
     init {
@@ -46,7 +44,7 @@ class TodoProvider(private val context: Context) {
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                     val item = snapshot.getValue(Todo::class.java)
                     item?.let {
-                        val allTimestamps = todoRepository.getAlltimestamps.value ?: listOf()
+                        val allTimestamps = todoDao.getAllTimestampts().value ?: listOf()
                         if (item.timestamp !in allTimestamps) {
                             addItem(item)
                         }
@@ -94,7 +92,7 @@ class TodoProvider(private val context: Context) {
 
     fun addItem(item: Todo) {
         Handler(handlerThread.looper).post {
-            todoRepository.insert(item)
+            todoDao.insert(item)
         }
     }
 
@@ -107,7 +105,7 @@ class TodoProvider(private val context: Context) {
     fun updateItem(item: Todo?) {
         item ?: return
         Handler(handlerThread.looper).post {
-            todoRepository.update(item)
+            todoDao.update(item)
         }
     }
 
@@ -120,7 +118,7 @@ class TodoProvider(private val context: Context) {
     fun deleteItem(itemTimestamp: Long?) {
         itemTimestamp ?: return
         Handler(handlerThread.looper).post {
-            todoRepository.delete(itemTimestamp)
+            todoDao.delete(itemTimestamp)
         }
     }
 

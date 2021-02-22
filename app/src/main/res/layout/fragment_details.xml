@@ -30,7 +30,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/title"
-                    style="@style/Todo.Details.Title"
+                    style="@style/Todo.Details"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/title_hint"
@@ -43,7 +43,6 @@
                 style="@style/Todo.Details.Layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 app:counterEnabled="true"
                 app:counterMaxLength="200"
                 app:errorEnabled="true"
@@ -53,7 +52,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/description"
-                    style="@style/Todo.Details.Description"
+                    style="@style/Todo.Details"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/description_hint"
@@ -72,7 +71,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/icon"
-                    style="@style/Todo.Details.Icon"
+                    style="@style/Todo.Details"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/icon_hint"

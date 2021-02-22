@@ -19,8 +19,6 @@
         <item name="toolbarStyle">@style/ToolbarStyle</item>
         <item name="backgroundColor">?attr/colorPrimaryVariant</item>
         <item name="background">?attr/colorPrimaryVariant</item>
-
-        <item name="icon_placeholder">@drawable/ic_placeholder_dark_theme</item>
     </style>
 
     <style name="ToolbarStyle" parent="@style/Widget.AppCompat.Toolbar">

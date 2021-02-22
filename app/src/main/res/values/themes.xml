@@ -19,9 +19,6 @@
         <item name="toolbarStyle">@style/ToolbarStyle</item>
         <item name="backgroundColor">@color/light_color_for_tiles</item>
         <item name="background">?attr/colorOnSecondary</item>
-
-        <item name="icon_placeholder">@drawable/ic_placeholder_light_theme</item>
-
     </style>
 
     <style name="ToolbarStyle" parent="@style/Widget.AppCompat.Toolbar">
