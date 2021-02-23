@@ -14,6 +14,9 @@ interface TodoDao {
     @Query("SELECT timestamp FROM todo")
     fun getAllTimestampts(): LiveData<List<Long>>
 
+    @Query("SELECT * FROM todo WHERE timestamp = :itemTimestamp")
+    fun getItemByTimestamp(itemTimestamp: Long?): Todo?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(item: Todo)
 

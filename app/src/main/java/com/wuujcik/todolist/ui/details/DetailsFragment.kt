@@ -10,6 +10,7 @@ import androidx.navigation.fragment.navArgs
 import com.wuujcik.todolist.R
 import com.wuujcik.todolist.persistence.Todo
 import com.wuujcik.todolist.model.TodoProvider
+import com.wuujcik.todolist.model.isTodoValid
 import com.wuujcik.todolist.utils.getApplication
 import kotlinx.android.synthetic.main.fragment_details.*
 import java.util.*
@@ -46,57 +47,53 @@ class DetailsFragment : Fragment() {
         cancelButton.setOnClickListener { findNavController().navigateUp() }
         saveButton.setOnClickListener { saveItem() }
     }
-    
+
 
     private fun saveItem() {
         val title = title.text.toString().trim()
         val description = description.text.toString().trim()
         val iconUrl = icon.text.toString().trim()
+        val timestamp = originalItem?.timestamp ?: Date().time
+        val item = Todo(title, description, timestamp, iconUrl)
 
-        if (isValid() && editingMode) {
-            val timestamp = originalItem?.timestamp ?: return
-            todoProvider.updateItem(Todo(title, description, timestamp, iconUrl))
-            todoProvider.updateItemInFirebase(Todo(title, description, timestamp, iconUrl))
+        if (!isTodoValid(item)) {
+            validateFields()
+            return
+        }
+        
+        if (editingMode) {
+            todoProvider.updateItem(item)
+            todoProvider.updateItemInFirebase(item)
             findNavController().navigateUp()
-
-        } else if (isValid()) {
-            todoProvider.addItemToFirebase(Todo(title, description, Date().time, iconUrl))
+        } else {
+            todoProvider.addItemToFirebase(item)
             findNavController().navigateUp()
         }
     }
 
 
-    private fun isValid(): Boolean {
-        var isValid = true
-
+    private fun validateFields() {
         when {
             title.text.toString().trim().isEmpty() -> {
                 title_layout.error = getString(R.string.error_field_empty)
-                isValid = false
             }
             title.text.toString().trim().length > 30 -> {
                 title_layout.error = getString(R.string.error_field_too_long)
-                isValid = false
             }
             else -> {
                 title_layout.error = null
             }
         }
-
         when {
             description.text.toString().trim().isEmpty() -> {
                 description_layout.error = getString(R.string.error_field_empty)
-                isValid = false
             }
             title.text.toString().trim().length > 200 -> {
                 description_layout.error = getString(R.string.error_field_too_long)
-                isValid = false
             }
             else -> {
                 description_layout.error = null
             }
         }
-
-        return isValid
     }
 }
