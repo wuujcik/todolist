@@ -16,13 +16,8 @@ class ListViewModel (val app: Application) : AndroidViewModel(app) {
             return TodoProvider(app)
         }
 
-    private val todoDao: TodoDao
-        get() {
-            return TodoDatabase.getDatabase(app).todoDao()
-        }
 
-
-    val allTodos: LiveData<PagedList<Todo>> = todoDao.getAll().toLiveData(30)
+    val allTodos: LiveData<PagedList<Todo>> = todoProvider.getAll.toLiveData(30)
 
 
     fun deleteTodo(item: Todo){

@@ -37,6 +37,64 @@ class TodoProvider(private val context: Context) {
         handlerThread.start()
     }
 
+    val getAll = todoDao.getAll()
+
+
+    fun addItem(item: Todo) {
+        if(isTodoValid(item)){
+            Handler(handlerThread.looper).post {
+                todoDao.insert(item)
+            }
+        } else {
+            //TODO: react somehow
+        }
+
+    }
+
+
+    fun addItemToFirebase(item: Todo) {
+        itemsReference.child(item.timestamp.toString()).setValue(item)
+    }
+
+
+    fun updateItem(item: Todo?) {
+        item ?: return
+        if (isTodoValid(item)) {
+            Handler(handlerThread.looper).post {
+                todoDao.update(item)
+            }
+        } else {
+            //TODO: react somehow
+        }
+    }
+
+
+    fun updateItemInFirebase(item: Todo) {
+        itemsReference.child(item.timestamp.toString()).setValue(item)
+    }
+
+
+    fun deleteItem(itemTimestamp: Long?) {
+        itemTimestamp ?: return
+        Handler(handlerThread.looper).post {
+            todoDao.delete(itemTimestamp)
+        }
+    }
+
+
+    fun deleteItemInFirebase(item: Todo) {
+        itemsReference.child(item.timestamp.toString()).removeValue()
+    }
+
+
+    fun getItemByTimestamp(itemTimestamp: Long?, completion: (todo: Todo?) -> Unit) {
+        itemTimestamp ?: return completion(null)
+        Handler(handlerThread.looper).post {
+          completion(todoDao.getItemByTimestamp(itemTimestamp))
+        }
+    }
+
+
     fun attachDatabaseReadListeners() {
         if (itemsEventListener == null) {
             //  create and attach read listener
@@ -59,8 +117,8 @@ class TodoProvider(private val context: Context) {
                 override fun onChildRemoved(snapshot: DataSnapshot) {
                     snapshot.key?.let { key ->
                         try {
-                            val a = key.toLong()
-                            deleteItem(a)
+                            val itemTimestamp = key.toLong()
+                            deleteItem(itemTimestamp)
                         } catch (e: Exception) {
                             Log.w(TAG, "Couldn't parse key to Long for $key, e: $e")
                         }
@@ -87,44 +145,6 @@ class TodoProvider(private val context: Context) {
             itemsReference.removeEventListener(it)
         }
         itemsEventListener = null
-    }
-
-
-    fun addItem(item: Todo) {
-        Handler(handlerThread.looper).post {
-            todoDao.insert(item)
-        }
-    }
-
-
-    fun addItemToFirebase(item: Todo) {
-        itemsReference.child(item.timestamp.toString()).setValue(item)
-    }
-
-
-    fun updateItem(item: Todo?) {
-        item ?: return
-        Handler(handlerThread.looper).post {
-            todoDao.update(item)
-        }
-    }
-
-
-    fun updateItemInFirebase(item: Todo) {
-        itemsReference.child(item.timestamp.toString()).setValue(item)
-    }
-
-
-    fun deleteItem(itemTimestamp: Long?) {
-        itemTimestamp ?: return
-        Handler(handlerThread.looper).post {
-            todoDao.delete(itemTimestamp)
-        }
-    }
-
-
-    fun deleteItemInFirebase(item: Todo) {
-        itemsReference.child(item.timestamp.toString()).removeValue()
     }
 
 
