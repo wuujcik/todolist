@@ -1,5 +1,6 @@
 package com.wuujcik.todolist.ui.details
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,23 +10,26 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.wuujcik.todolist.R
 import com.wuujcik.todolist.persistence.Todo
-import com.wuujcik.todolist.model.TodoProvider
 import com.wuujcik.todolist.model.isTodoValid
-import com.wuujcik.todolist.utils.getApplication
+import com.wuujcik.todolist.ui.MainActivity
 import kotlinx.android.synthetic.main.fragment_details.*
 import java.util.*
+import javax.inject.Inject
 
 class DetailsFragment : Fragment() {
+
+    @Inject
+    lateinit var detailsViewModel: DetailsViewModel
 
     var originalItem: Todo? = null
     val args: DetailsFragmentArgs by navArgs()
     private var editingMode = false
 
-    private val todoProvider: TodoProvider
-        get() {
-            return TodoProvider(getApplication())
-        }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (activity as MainActivity).mainActivityComponent.inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,11 +66,10 @@ class DetailsFragment : Fragment() {
         }
         
         if (editingMode) {
-            todoProvider.updateItem(item)
-            todoProvider.updateItemInFirebase(item)
+            detailsViewModel.updateItem(item)
             findNavController().navigateUp()
         } else {
-            todoProvider.addItemToFirebase(item)
+            detailsViewModel.createItem(item)
             findNavController().navigateUp()
         }
     }

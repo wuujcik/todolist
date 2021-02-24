@@ -1,27 +1,35 @@
 package com.wuujcik.todolist.ui.list
 
 import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.paging.PagedList
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.wuujcik.todolist.R
 import com.wuujcik.todolist.persistence.Todo
+import com.wuujcik.todolist.ui.MainActivity
 import kotlinx.android.synthetic.main.fragment_list.*
+import javax.inject.Inject
 
 
 class ListFragment : Fragment() {
 
-    private val listViewModel by viewModels<ListViewModel>()
+    @Inject
+    lateinit var listViewModel: ListViewModel
+
+
     private var todoListAdapter: TodoListAdapter? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (activity as MainActivity).mainActivityComponent.inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +43,6 @@ class ListFragment : Fragment() {
         listViewModel.attachDatabaseReadListeners()
         setListAdapter()
 
-        initSwipeToDelete()
         create_new_item.setOnClickListener {
             findNavController().navigate(
                 ListFragmentDirections.actionListFragmentToDetailsFragment(
@@ -89,32 +96,9 @@ class ListFragment : Fragment() {
 
         list_recycler_viewer.adapter = todoListAdapter
         list_recycler_viewer.layoutManager = LinearLayoutManager(this.context)
-    }
 
-
-    private fun initSwipeToDelete() {
-        ItemTouchHelper(object : ItemTouchHelper.Callback() {
-            // enable the items to swipe to the left or right
-            override fun getMovementFlags(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder
-            ): Int =
-                makeMovementFlags(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
-
-            override fun onMove(
-                recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean = false
-
-            // When an item is swiped, remove the item via the view model. The list item will be
-            // automatically removed in response, because the adapter is observing the live list.
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                (viewHolder as TodoListAdapter.TodoViewHolder).todo?.let {
-                    listViewModel.invalidateTodos()
-                    listViewModel.deleteTodo(it)
-                }
-            }
-        }).attachToRecyclerView(list_recycler_viewer)
+        // add swipe to delete
+        listViewModel.itemTouchHelper.attachToRecyclerView(list_recycler_viewer)
     }
 
 

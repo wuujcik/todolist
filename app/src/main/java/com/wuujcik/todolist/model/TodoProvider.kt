@@ -1,37 +1,21 @@
 package com.wuujcik.todolist.model
 
-import android.content.Context
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.Log
 import com.google.firebase.database.*
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
+import com.wuujcik.todolist.di.ActivityScope
 import com.wuujcik.todolist.persistence.*
 import com.wuujcik.todolist.ui.list.ListFragment
 import java.lang.Exception
+import javax.inject.Inject
 
-
-class TodoProvider(private val context: Context) {
+@ActivityScope
+class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: FirebaseDatabase) {
 
     private val handlerThread = HandlerThread("TODO_PROVIDER_HANDLER_THREAD")
     private var itemsEventListener: ChildEventListener? = null
-
-
-    private val firebaseDb: FirebaseDatabase
-        get() {
-            return Firebase.database
-        }
-
-    private val itemsReference: DatabaseReference
-        get() {
-            return firebaseDb.reference.child(ITEMS_KEY)
-        }
-
-    private val todoDao: TodoDao
-        get() {
-            return TodoDatabase.getDatabase(context.applicationContext).todoDao()
-        }
+    private val itemsReference = firebaseDb.reference.child(ITEMS_KEY)
 
     init {
         handlerThread.start()
@@ -90,7 +74,7 @@ class TodoProvider(private val context: Context) {
     fun getItemByTimestamp(itemTimestamp: Long?, completion: (todo: Todo?) -> Unit) {
         itemTimestamp ?: return completion(null)
         Handler(handlerThread.looper).post {
-          completion(todoDao.getItemByTimestamp(itemTimestamp))
+            completion(todoDao.getItemByTimestamp(itemTimestamp))
         }
     }
 

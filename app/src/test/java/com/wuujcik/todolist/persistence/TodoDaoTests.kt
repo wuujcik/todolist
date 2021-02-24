@@ -17,7 +17,7 @@ import java.util.*
 @RunWith(RobolectricTestRunner::class)
 class TodoDaoTests {
 
-    private lateinit var database: TodoDatabase
+    private lateinit var database: RoomDatabase
     private lateinit var todoDao: TodoDao
 
     @Before
@@ -26,7 +26,7 @@ class TodoDaoTests {
         // process is killed
         database = Room.inMemoryDatabaseBuilder(
             ApplicationProvider.getApplicationContext(),
-            TodoDatabase::class.java
+            RoomDatabase::class.java
         ).allowMainThreadQueries().build()
         todoDao = database.todoDao()
     }
