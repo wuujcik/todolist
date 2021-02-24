@@ -23,6 +23,6 @@
     <string name="error_field_empty">Cannot be empty</string>
     <string name="error_field_too_long">Text is too long</string>
     <string name="add_items_to_your_list">Add items to your list</string>
-    <string name="img_url_error">Some of you icon urls couldn\'t be parsed to an image</string>
+    <string name="img_url_error">Some of your icon urls couldn\'t be parsed to an image</string>
 
 </resources>

@@ -1,7 +1,5 @@
 package com.wuujcik.todolist.provider
 
-import android.content.Context
-import androidx.test.core.app.ApplicationProvider
 import com.wuujcik.todolist.model.TodoProvider
 import com.wuujcik.todolist.persistence.Todo
 import org.hamcrest.CoreMatchers.equalTo
@@ -9,19 +7,19 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito.mock
 import org.robolectric.RobolectricTestRunner
 import java.util.*
 
 @RunWith(RobolectricTestRunner::class)
 class TodoProviderTests {
 
-    private val context: Context = ApplicationProvider.getApplicationContext()
     private lateinit var provider: TodoProvider
 
 
     @Before
     fun initProvider() {
-        provider = TodoProvider(context)
+        provider = mock(TodoProvider::class.java)
     }
 
     @Test
@@ -49,7 +47,7 @@ class TodoProviderTests {
         provider.addItem(item)
 
         // WHEN
-        provider.deleteItem(time)
+        provider.deleteItem(item)
 
         // THEN
         provider.getItemByTimestamp(time) {
@@ -89,7 +87,7 @@ class TodoProviderTests {
 
         // WHEN
         val updatedItem = Todo("updatedTitle", "updatedDescription", time, "ipdatedUrl")
-        provider.updateItemInRoom(updatedItem)
+        provider.updateItem(updatedItem)
 
         // THEN
         provider.getItemByTimestamp(time) {
