@@ -25,40 +25,53 @@ class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: Firebas
 
 
     fun addItem(item: Todo) {
-        if(isTodoValid(item)){
-            Handler(handlerThread.looper).post {
-                todoDao.insert(item)
-            }
-        } else {
-            //TODO: react somehow
-        }
-
+        addItemToFirebase(item)
     }
 
 
-    fun addItemToFirebase(item: Todo) {
+    private fun addItemToRoom(item: Todo) {
+        if (isTodoValid(item)) {
+            Handler(handlerThread.looper).post {
+                todoDao.insert(item)
+            }
+        }
+    }
+
+
+    private fun addItemToFirebase(item: Todo) {
         itemsReference.child(item.timestamp.toString()).setValue(item)
     }
 
 
     fun updateItem(item: Todo?) {
         item ?: return
+        updateItemInRoom(item)
+        updateItemInFirebase(item)
+    }
+
+
+    private fun updateItemInRoom(item: Todo) {
         if (isTodoValid(item)) {
             Handler(handlerThread.looper).post {
                 todoDao.update(item)
             }
-        } else {
-            //TODO: react somehow
         }
     }
 
 
-    fun updateItemInFirebase(item: Todo) {
+    private fun updateItemInFirebase(item: Todo) {
         itemsReference.child(item.timestamp.toString()).setValue(item)
     }
 
 
-    fun deleteItem(itemTimestamp: Long?) {
+    fun deleteItem(item: Todo?) {
+        item ?: return
+        deleteItemInRoom(item.timestamp)
+        deleteItemInFirebase(item)
+    }
+
+
+    private fun deleteItemInRoom(itemTimestamp: Long?) {
         itemTimestamp ?: return
         Handler(handlerThread.looper).post {
             todoDao.delete(itemTimestamp)
@@ -66,7 +79,7 @@ class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: Firebas
     }
 
 
-    fun deleteItemInFirebase(item: Todo) {
+    private fun deleteItemInFirebase(item: Todo) {
         itemsReference.child(item.timestamp.toString()).removeValue()
     }
 
@@ -88,26 +101,28 @@ class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: Firebas
                     item?.let {
                         val allTimestamps = todoDao.getAllTimestampts().value ?: listOf()
                         if (item.timestamp !in allTimestamps) {
-                            addItem(item)
+                            addItemToRoom(item)
                         }
                     }
                 }
 
                 override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
                     val updatedTodo = snapshot.getValue(Todo::class.java)
-                    updateItem(updatedTodo)
+                    updatedTodo ?: return
+                    updateItemInRoom(updatedTodo)
                 }
 
                 override fun onChildRemoved(snapshot: DataSnapshot) {
                     snapshot.key?.let { key ->
                         try {
                             val itemTimestamp = key.toLong()
-                            deleteItem(itemTimestamp)
+                            deleteItemInRoom(itemTimestamp)
                         } catch (e: Exception) {
                             Log.w(TAG, "Couldn't parse key to Long for $key, e: $e")
                         }
                     }
                 }
+
                 override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
                 override fun onCancelled(error: DatabaseError) {
                     // Failed to read value

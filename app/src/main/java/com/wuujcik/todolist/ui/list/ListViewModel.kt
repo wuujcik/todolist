@@ -18,8 +18,7 @@ class ListViewModel @Inject constructor(private val todoProvider: TodoProvider) 
 
 
     fun deleteTodo(item: Todo) {
-        todoProvider.deleteItem(item.timestamp)
-        todoProvider.deleteItemInFirebase(item)
+        todoProvider.deleteItem(item)
     }
 
 

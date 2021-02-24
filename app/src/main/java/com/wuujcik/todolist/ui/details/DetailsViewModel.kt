@@ -8,11 +8,10 @@ import javax.inject.Inject
 class DetailsViewModel @Inject constructor(private val todoProvider: TodoProvider) : ViewModel() {
 
    fun createItem(item: Todo){
-      todoProvider.addItemToFirebase(item)
+      todoProvider.addItem(item)
    }
 
    fun updateItem(item: Todo){
       todoProvider.updateItem(item)
-      todoProvider.updateItemInFirebase(item)
    }
 }

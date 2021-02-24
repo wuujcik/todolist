@@ -89,7 +89,7 @@ class TodoProviderTests {
 
         // WHEN
         val updatedItem = Todo("updatedTitle", "updatedDescription", time, "ipdatedUrl")
-        provider.updateItem(updatedItem)
+        provider.updateItemInRoom(updatedItem)
 
         // THEN
         provider.getItemByTimestamp(time) {

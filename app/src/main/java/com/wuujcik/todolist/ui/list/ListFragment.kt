@@ -22,9 +22,8 @@ class ListFragment : Fragment() {
 
     @Inject
     lateinit var listViewModel: ListViewModel
-
-
     private var todoListAdapter: TodoListAdapter? = null
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
