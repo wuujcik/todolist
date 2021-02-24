@@ -10,7 +10,7 @@ Register your app with package name `com.wuujcik.todolist`
 Save it in your local copy of the repository in `app` folder.
 Then just click next in firebase.
 ##### 5. In the Firebase console, go to Realtime Database
-Click `Create Database` and setup your security rules. Note that the application currently doesn't have authentication, so you can either implement it  (**recommended!**) or set the app in an open mode. To do that, go to rules and for open mode copy this:
+Click `Create Database` and setup your security rules. Note that the application currently doesn't have authentication, so you can either implement it  (**recommended!**) or set the app in an open mode. To set it as open, go to rules and copy this:
 ```
 {
   "rules": {
