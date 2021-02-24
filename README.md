@@ -1,6 +1,8 @@
 # todolist
 
-This is a simple application for sharing tasks. To get going, you need to:
+This is a simple application for keeping and sharing tasks. If you want simply to use it on your phone - just clone the project and run APK on your phone.
+
+For synchronisation between devices, you need to:
 
 ##### 1. Clone this repository to your computer
 ##### 2. Create Firebase project [here](https://console.firebase.google.com/u/0/)
@@ -20,4 +22,4 @@ Click `Create Database` and setup your security rules. Note that the application
 }
 ```
 
-#### Now you can build your project in Android Studio and run the APK on your phone!
+#### Now you can build your project in Android Studio and run the APK on multiple phones, all of them will be synchronised!
