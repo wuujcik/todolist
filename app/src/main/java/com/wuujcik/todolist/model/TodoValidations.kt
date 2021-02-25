@@ -1,5 +1,7 @@
 package com.wuujcik.todolist.model
 
+import com.wuujcik.todolist.model.TodoProvider.Companion.DESCRIPTION_MAX_LENGTH
+import com.wuujcik.todolist.model.TodoProvider.Companion.TITLE_MAX_LENGTH
 import com.wuujcik.todolist.persistence.Todo
 
 
@@ -10,14 +12,14 @@ fun isTodoValid(item: Todo?): Boolean {
     if (item.title.isNullOrEmpty()) {
         return false
     }
-    if (item.title!!.length > 30) {
+    if (item.title!!.length > TITLE_MAX_LENGTH) {
         return false
     }
 
     if (item.description.isNullOrEmpty()) {
         return false
     }
-    if (item.description!!.length > 200) {
+    if (item.description!!.length > DESCRIPTION_MAX_LENGTH) {
         return false
     }
 

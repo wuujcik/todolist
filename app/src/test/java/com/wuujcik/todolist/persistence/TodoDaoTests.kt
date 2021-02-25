@@ -22,8 +22,6 @@ class TodoDaoTests {
 
     @Before
     fun initDbAndDao() {
-        // using an in-memory database because the information stored here disappears when the
-        // process is killed
         database = Room.inMemoryDatabaseBuilder(
             ApplicationProvider.getApplicationContext(),
             RoomDatabase::class.java
@@ -36,15 +34,15 @@ class TodoDaoTests {
 
     @Test
     fun insertItemAndGetById() {
-        // GIVEN - insert a task
+        // GIVEN
         val time = Date().time
         val item = Todo("title", "description", time, "iconUrl")
         todoDao.insert(item)
 
-        // WHEN - Get the task by id from the database
+        // WHEN
         val loaded = todoDao.getItemByTimestamp(item.timestamp)
 
-        // THEN - The loaded data contains the expected values
+        // THEN
         assertThat<Todo>(loaded as Todo, CoreMatchers.notNullValue())
         assertThat(loaded.timestamp, `is`(item.timestamp))
         assertThat(loaded.title, `is`(item.title))

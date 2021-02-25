@@ -17,15 +17,15 @@
     </ScrollView>
 
     <com.google.android.material.textview.MaterialTextView
-        android:visibility="gone"
         android:id="@+id/empty_recycler_view"
-        android:text="@string/add_items_to_your_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/add_items_to_your_list"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/create_new_item"

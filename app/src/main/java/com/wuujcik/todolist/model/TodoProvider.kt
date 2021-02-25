@@ -94,7 +94,6 @@ class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: Firebas
 
     fun attachDatabaseReadListeners() {
         if (itemsEventListener == null) {
-            //  create and attach read listener
             itemsEventListener = object : ChildEventListener {
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                     val item = snapshot.getValue(Todo::class.java)
@@ -125,7 +124,6 @@ class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: Firebas
 
                 override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
                 override fun onCancelled(error: DatabaseError) {
-                    // Failed to read value
                     Log.w(ListFragment.TAG, "Failed to read value. Error: $error")
                 }
             }
@@ -150,5 +148,7 @@ class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: Firebas
     companion object {
         const val TAG = "TodoProvider"
         const val ITEMS_KEY = "items"
+        const val TITLE_MAX_LENGTH = 30
+        const val DESCRIPTION_MAX_LENGTH = 200
     }
 }

@@ -9,9 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.wuujcik.todolist.R
+import com.wuujcik.todolist.model.TodoProvider.Companion.DESCRIPTION_MAX_LENGTH
+import com.wuujcik.todolist.model.TodoProvider.Companion.TITLE_MAX_LENGTH
 import com.wuujcik.todolist.persistence.Todo
 import com.wuujcik.todolist.model.isTodoValid
 import com.wuujcik.todolist.ui.MainActivity
+import com.wuujcik.todolist.utils.textToTrimString
 import kotlinx.android.synthetic.main.fragment_details.*
 import java.util.*
 import javax.inject.Inject
@@ -21,8 +24,8 @@ class DetailsFragment : Fragment() {
     @Inject
     lateinit var detailsViewModel: DetailsViewModel
 
-    var originalItem: Todo? = null
-    val args: DetailsFragmentArgs by navArgs()
+    private var originalItem: Todo? = null
+    private val args: DetailsFragmentArgs by navArgs()
     private var editingMode = false
 
 
@@ -35,7 +38,6 @@ class DetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_details, container, false)
     }
 
@@ -54,9 +56,9 @@ class DetailsFragment : Fragment() {
 
 
     private fun saveItem() {
-        val title = title.text.toString().trim()
-        val description = description.text.toString().trim()
-        val iconUrl = icon.text.toString().trim()
+        val title = title.text.textToTrimString()
+        val description = description.text.textToTrimString()
+        val iconUrl = icon.text.textToTrimString()
         val timestamp = originalItem?.timestamp ?: Date().time
         val item = Todo(title, description, timestamp, iconUrl)
 
@@ -64,23 +66,22 @@ class DetailsFragment : Fragment() {
             validateFields()
             return
         }
-        
+
         if (editingMode) {
             detailsViewModel.updateItem(item)
-            findNavController().navigateUp()
         } else {
             detailsViewModel.createItem(item)
-            findNavController().navigateUp()
         }
+        findNavController().navigateUp()
     }
 
 
     private fun validateFields() {
         when {
-            title.text.toString().trim().isEmpty() -> {
+            title.text.textToTrimString().isEmpty() -> {
                 title_layout.error = getString(R.string.error_field_empty)
             }
-            title.text.toString().trim().length > 30 -> {
+            title.text.textToTrimString().length > TITLE_MAX_LENGTH -> {
                 title_layout.error = getString(R.string.error_field_too_long)
             }
             else -> {
@@ -88,10 +89,10 @@ class DetailsFragment : Fragment() {
             }
         }
         when {
-            description.text.toString().trim().isEmpty() -> {
+            description.text.textToTrimString().isEmpty() -> {
                 description_layout.error = getString(R.string.error_field_empty)
             }
-            title.text.toString().trim().length > 200 -> {
+            title.text.textToTrimString().length > DESCRIPTION_MAX_LENGTH -> {
                 description_layout.error = getString(R.string.error_field_too_long)
             }
             else -> {

@@ -21,24 +21,19 @@ class ListViewModel @Inject constructor(private val todoProvider: TodoProvider) 
         todoProvider.deleteItem(item)
     }
 
-
     fun invalidateTodos() {
         allTodos.value?.dataSource?.invalidate()
     }
-
 
     fun attachDatabaseReadListeners() {
         todoProvider.attachDatabaseReadListeners()
     }
 
-
     fun detachDatabaseReadListener() {
         todoProvider.detachDatabaseReadListener()
     }
 
-
-    val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.Callback() {
-        // enable the items to swipe to the left or right
+    val swipeToDelete = ItemTouchHelper(object : ItemTouchHelper.Callback() {
         override fun getMovementFlags(
             recyclerView: RecyclerView,
             viewHolder: RecyclerView.ViewHolder
@@ -50,8 +45,6 @@ class ListViewModel @Inject constructor(private val todoProvider: TodoProvider) 
             target: RecyclerView.ViewHolder
         ): Boolean = false
 
-        // When an item is swiped, remove the item via the view model. The list item will be
-        // automatically removed in response, because the adapter is observing the live list.
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             (viewHolder as TodoListAdapter.TodoViewHolder).todo?.let {
                 invalidateTodos()
@@ -59,5 +52,4 @@ class ListViewModel @Inject constructor(private val todoProvider: TodoProvider) 
             }
         }
     })
-
 }

@@ -22,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:counterEnabled="true"
-                app:counterMaxLength="30"
+                app:counterMaxLength="@integer/title_max_value"
                 app:errorEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -34,7 +34,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/title_hint"
-                    android:maxLength="30"
+                    android:maxLength="@integer/title_max_value"
                     android:nextFocusForward="@+id/description" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -44,7 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:counterEnabled="true"
-                app:counterMaxLength="200"
+                app:counterMaxLength="@integer/description_max_value"
                 app:errorEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -56,7 +56,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/description_hint"
-                    android:maxLength="200"
+                    android:maxLength="@integer/description_max_value"
                     android:nextFocusForward="@+id/surnameText" />
             </com.google.android.material.textfield.TextInputLayout>
 

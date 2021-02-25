@@ -51,12 +51,10 @@ class ListFragment : Fragment() {
         }
     }
 
-
     override fun onPause() {
         super.onPause()
         listViewModel.detachDatabaseReadListener()
     }
-
 
     private fun setListAdapter() {
         this.activity?.let {
@@ -64,40 +62,46 @@ class ListFragment : Fragment() {
         }
 
         listViewModel.allTodos.observe(viewLifecycleOwner, { list: PagedList<Todo>? ->
-            todoListAdapter?.placeholderView = empty_recycler_view
-            todoListAdapter?.submitList(list)
-
-            todoListAdapter?.onItemClicked = { data ->
-                findNavController().navigate(
-                    ListFragmentDirections.actionListFragmentToDetailsFragment(data)
-                )
-            }
-            todoListAdapter?.onItemLongClicked = { item ->
-                AlertDialog.Builder(this.context, R.style.AlertDialog)
-                    .setTitle(R.string.delete)
-                    .setMessage(R.string.delete_confirm_text)
-                    .setNegativeButton(R.string.yes) { _, _ ->
-                        listViewModel.deleteTodo(item)
-                        listViewModel.invalidateTodos()
+            todoListAdapter?.apply {
+                placeholderView = empty_recycler_view
+                submitList(list)
+                onItemClicked = { data ->
+                    findNavController().navigate(
+                        ListFragmentDirections.actionListFragmentToDetailsFragment(data)
+                    )
+                }
+                onItemLongClicked = { item ->
+                    showDialog(item)
+                }
+                onErrorMessage = { message ->
+                    view?.let {
+                        val snackbar = Snackbar.make(it, message, Snackbar.LENGTH_LONG)
+                        snackbar.show()
                     }
-                    .setNeutralButton(R.string.button_cancel) { dialog, _ ->
-                        dialog.dismiss()
-                    }
-                    .show()
-            }
-            todoListAdapter?.onErrorMessage = { message ->
-                view?.let {
-                    val snackbar = Snackbar.make(it, message, Snackbar.LENGTH_LONG)
-                    snackbar.show()
                 }
             }
+
         })
+        list_recycler_viewer.apply {
+            adapter = todoListAdapter
+            layoutManager = LinearLayoutManager(this.context)
+        }
 
-        list_recycler_viewer.adapter = todoListAdapter
-        list_recycler_viewer.layoutManager = LinearLayoutManager(this.context)
+        listViewModel.swipeToDelete.attachToRecyclerView(list_recycler_viewer)
+    }
 
-        // add swipe to delete
-        listViewModel.itemTouchHelper.attachToRecyclerView(list_recycler_viewer)
+    private fun showDialog(item: Todo) {
+        AlertDialog.Builder(this.context, R.style.AlertDialog)
+            .setTitle(R.string.delete)
+            .setMessage(R.string.delete_confirm_text)
+            .setNegativeButton(R.string.yes) { _, _ ->
+                listViewModel.deleteTodo(item)
+                listViewModel.invalidateTodos()
+            }
+            .setNeutralButton(R.string.button_cancel) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 
 

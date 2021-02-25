@@ -14,7 +14,6 @@ interface MainActivityComponent {
         fun create(): MainActivityComponent
     }
 
-    // Classes that can be injected by this Component
     fun inject(activity: MainActivity)
     fun inject(fragment: ListFragment)
     fun inject(fragment: DetailsFragment)
