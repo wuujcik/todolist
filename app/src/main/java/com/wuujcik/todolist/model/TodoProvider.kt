@@ -1,25 +1,21 @@
 package com.wuujcik.todolist.model
 
-import android.os.Handler
-import android.os.HandlerThread
 import android.util.Log
 import com.google.firebase.database.*
 import com.wuujcik.todolist.di.ActivityScope
 import com.wuujcik.todolist.persistence.*
 import com.wuujcik.todolist.ui.list.ListFragment
+import kotlinx.coroutines.launch
 import java.lang.Exception
 import javax.inject.Inject
 
 @ActivityScope
 class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: FirebaseDatabase) {
 
-    private val handlerThread = HandlerThread("TODO_PROVIDER_HANDLER_THREAD")
     private var itemsEventListener: ChildEventListener? = null
     private val itemsReference = firebaseDb.reference.child(ITEMS_KEY)
+    private val scope = kotlinx.coroutines.GlobalScope // TODO: maybe some more specific scope
 
-    init {
-        handlerThread.start()
-    }
 
     val getAll = todoDao.getAll()
 
@@ -31,7 +27,7 @@ class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: Firebas
 
     private fun addItemToRoom(item: Todo) {
         if (isTodoValid(item)) {
-            Handler(handlerThread.looper).post {
+            scope.launch {
                 todoDao.insert(item)
             }
         }
@@ -52,7 +48,7 @@ class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: Firebas
 
     private fun updateItemInRoom(item: Todo) {
         if (isTodoValid(item)) {
-            Handler(handlerThread.looper).post {
+            scope.launch {
                 todoDao.update(item)
             }
         }
@@ -73,7 +69,7 @@ class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: Firebas
 
     private fun deleteItemInRoom(itemTimestamp: Long?) {
         itemTimestamp ?: return
-        Handler(handlerThread.looper).post {
+        scope.launch {
             todoDao.delete(itemTimestamp)
         }
     }
@@ -84,9 +80,9 @@ class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: Firebas
     }
 
 
-    fun getItemByTimestamp(itemTimestamp: Long?, completion: (todo: Todo?) -> Unit) {
+    fun getItemByTimestamp(itemTimestamp: Long?, completion: (todo: Todo?) -> Unit) { //TODO: this shouldn't be a callback
         itemTimestamp ?: return completion(null)
-        Handler(handlerThread.looper).post {
+        scope.launch {
             completion(todoDao.getItemByTimestamp(itemTimestamp))
         }
     }
