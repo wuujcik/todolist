@@ -1,12 +1,17 @@
 package com.wuujcik.todolist.model
 
 import android.util.Log
-import com.google.firebase.database.*
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.wuujcik.todolist.di.ActivityScope
-import com.wuujcik.todolist.persistence.*
+import com.wuujcik.todolist.persistence.Todo
+import com.wuujcik.todolist.persistence.TodoDao
 import com.wuujcik.todolist.ui.list.ListFragment
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import java.lang.Exception
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @ActivityScope
@@ -14,7 +19,6 @@ class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: Firebas
 
     private var itemsEventListener: ChildEventListener? = null
     private val itemsReference = firebaseDb.reference.child(ITEMS_KEY)
-    private val scope = kotlinx.coroutines.GlobalScope // TODO: maybe some more specific scope
 
 
     val getAll = todoDao.getAll()
@@ -24,8 +28,7 @@ class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: Firebas
         addItemToFirebase(item)
     }
 
-
-    private fun addItemToRoom(item: Todo) {
+    fun addItemToRoom(item: Todo, scope: CoroutineScope) {
         if (isTodoValid(item)) {
             scope.launch {
                 todoDao.insert(item)
@@ -33,20 +36,17 @@ class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: Firebas
         }
     }
 
-
     private fun addItemToFirebase(item: Todo) {
         itemsReference.child(item.timestamp.toString()).setValue(item)
     }
 
-
-    fun updateItem(item: Todo?) {
+    fun updateItem(item: Todo?, scope: CoroutineScope) {
         item ?: return
-        updateItemInRoom(item)
+        updateItemInRoom(item, scope)
         updateItemInFirebase(item)
     }
 
-
-    private fun updateItemInRoom(item: Todo) {
+    private fun updateItemInRoom(item: Todo, scope: CoroutineScope) {
         if (isTodoValid(item)) {
             scope.launch {
                 todoDao.update(item)
@@ -54,41 +54,35 @@ class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: Firebas
         }
     }
 
-
     private fun updateItemInFirebase(item: Todo) {
         itemsReference.child(item.timestamp.toString()).setValue(item)
     }
 
-
-    fun deleteItem(item: Todo?) {
+    fun deleteItem(item: Todo?, scope: CoroutineScope) {
         item ?: return
-        deleteItemInRoom(item.timestamp)
+        deleteItemInRoom(item.timestamp, scope)
         deleteItemInFirebase(item)
     }
 
-
-    private fun deleteItemInRoom(itemTimestamp: Long?) {
+    private fun deleteItemInRoom(itemTimestamp: Long?, scope: CoroutineScope) {
         itemTimestamp ?: return
         scope.launch {
             todoDao.delete(itemTimestamp)
         }
     }
 
-
     private fun deleteItemInFirebase(item: Todo) {
         itemsReference.child(item.timestamp.toString()).removeValue()
     }
 
-
-    fun getItemByTimestamp(itemTimestamp: Long?, completion: (todo: Todo?) -> Unit) { //TODO: this shouldn't be a callback
-        itemTimestamp ?: return completion(null)
-        scope.launch {
-            completion(todoDao.getItemByTimestamp(itemTimestamp))
+    suspend fun getItemByTimestamp(itemTimestamp: Long?, scope: CoroutineScope): Todo? {
+        itemTimestamp ?: return null
+        return withContext(scope.coroutineContext) {
+            todoDao.getItemByTimestamp(itemTimestamp)
         }
     }
 
-
-    fun attachDatabaseReadListeners() {
+    fun attachDatabaseReadListeners(coroutineScope: CoroutineScope) {
         if (itemsEventListener == null) {
             itemsEventListener = object : ChildEventListener {
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
@@ -96,7 +90,7 @@ class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: Firebas
                     item?.let {
                         val allTimestamps = todoDao.getAllTimestampts().value ?: listOf()
                         if (item.timestamp !in allTimestamps) {
-                            addItemToRoom(item)
+                            addItemToRoom(item, coroutineScope)
                         }
                     }
                 }
@@ -104,14 +98,14 @@ class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: Firebas
                 override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
                     val updatedTodo = snapshot.getValue(Todo::class.java)
                     updatedTodo ?: return
-                    updateItemInRoom(updatedTodo)
+                    updateItemInRoom(updatedTodo, coroutineScope)
                 }
 
                 override fun onChildRemoved(snapshot: DataSnapshot) {
                     snapshot.key?.let { key ->
                         try {
                             val itemTimestamp = key.toLong()
-                            deleteItemInRoom(itemTimestamp)
+                            deleteItemInRoom(itemTimestamp, coroutineScope)
                         } catch (e: Exception) {
                             Log.w(TAG, "Couldn't parse key to Long for $key, e: $e")
                         }
@@ -131,7 +125,6 @@ class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: Firebas
 
         itemsReference.keepSynced(true)
     }
-
 
     fun detachDatabaseReadListener() {
         itemsEventListener?.let {

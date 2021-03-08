@@ -19,7 +19,7 @@ class ListViewModel @Inject constructor(private val todoProvider: TodoProvider) 
 
     fun deleteTodo(item: Todo) {
         viewModelScope.launch {
-            todoProvider.deleteItem(item)
+            todoProvider.deleteItem(item, viewModelScope)
         }
     }
 
@@ -29,7 +29,7 @@ class ListViewModel @Inject constructor(private val todoProvider: TodoProvider) 
 
     fun attachDatabaseReadListeners() {
         viewModelScope.launch {
-            todoProvider.attachDatabaseReadListeners()
+            todoProvider.attachDatabaseReadListeners(viewModelScope)
         }
     }
 

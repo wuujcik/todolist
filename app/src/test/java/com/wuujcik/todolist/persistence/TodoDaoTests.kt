@@ -2,6 +2,7 @@ package com.wuujcik.todolist.persistence
 
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
+import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -11,10 +12,13 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import java.util.*
+import kotlin.jvm.Throws
 
 
 @RunWith(RobolectricTestRunner::class)
+@Config(sdk = [28])
 class TodoDaoTests {
 
     private lateinit var database: RoomDatabase
@@ -33,7 +37,7 @@ class TodoDaoTests {
     fun closeDb() = database.close()
 
     @Test
-    fun insertItemAndGetById() {
+    fun insertItemAndGetById() = runBlocking {
         // GIVEN
         val time = Date().time
         val item = Todo("title", "description", time, "iconUrl")
@@ -52,7 +56,7 @@ class TodoDaoTests {
 
     @Test
     @Throws(Exception::class)
-    fun insertAndDelete() {
+    fun insertAndDelete() = runBlocking {
         // GIVEN
         val time = Date().time
         val item = Todo("title", "description", time, "url")
@@ -63,12 +67,12 @@ class TodoDaoTests {
 
         // THEN
         val result = todoDao.getItemByTimestamp(time)
-        assertThat(result, equalTo(null))
+        assertThat(result, CoreMatchers.`is`(CoreMatchers.nullValue()))
     }
 
     @Test
     @Throws(Exception::class)
-    fun insertAndUpdate() {
+    fun insertAndUpdate() = runBlocking {
         // GIVEN
         val time = Date().time
         val item = Todo("title", "description", time, "url")
