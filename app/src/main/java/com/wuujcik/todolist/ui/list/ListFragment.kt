@@ -59,9 +59,7 @@ class ListFragment : Fragment() {
     }
 
     private fun setListAdapter() {
-        this.activity?.let {
-            todoListAdapter = TodoListAdapter(it)
-        }
+        todoListAdapter = TodoListAdapter()
 
         listViewModel.allTodos.observe(viewLifecycleOwner, { list: PagedList<Todo>? ->
             todoListAdapter?.apply {

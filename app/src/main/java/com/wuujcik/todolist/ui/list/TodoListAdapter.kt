@@ -4,20 +4,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
 import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.wuujcik.todolist.R
-import com.wuujcik.todolist.model.ImageProvider
 import com.wuujcik.todolist.persistence.Todo
 import com.wuujcik.todolist.utils.formatShortDate
-import kotlinx.android.synthetic.main.fragment_list.*
 import kotlinx.android.synthetic.main.item_todo.view.*
 
 
-class TodoListAdapter(val activity: FragmentActivity) : PagedListAdapter<Todo, TodoListAdapter.TodoViewHolder>(DIFF_CALLBACK) {
+class TodoListAdapter : PagedListAdapter<Todo, TodoListAdapter.TodoViewHolder>(DIFF_CALLBACK) {
 
     /** Callback when user click on holder */
     var onItemClicked: (item: Todo) -> Unit = {}
@@ -59,16 +57,7 @@ class TodoListAdapter(val activity: FragmentActivity) : PagedListAdapter<Todo, T
                 date_created.text = formatShortDate(context, date)
             }
             if (item.iconUrl != null && item.iconUrl != "") {
-                val imageProvider = ImageProvider()
-                imageProvider.loadImageFromWebOperations(item.iconUrl) { drawable, exception ->
-                    if (exception != null) {
-                        onErrorMessage(context.getString(R.string.img_url_error))
-                        return@loadImageFromWebOperations
-                    }
-                    activity.runOnUiThread {
-                        icon_img.setImageDrawable(drawable)
-                    }
-                }
+                icon_img.load(item.iconUrl)
             } else {
                 icon_img.setImageDrawable(
                     ContextCompat.getDrawable(
