@@ -15,10 +15,7 @@ fun isTodoValid(item: Todo?): Boolean {
     if (item.title!!.length > TITLE_MAX_LENGTH) {
         return false
     }
-
-    if (item.description.isNullOrEmpty()) {
-        return false
-    }
+    
     if (item.description!!.length > DESCRIPTION_MAX_LENGTH) {
         return false
     }

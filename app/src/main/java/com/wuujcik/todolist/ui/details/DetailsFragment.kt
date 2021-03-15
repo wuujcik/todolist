@@ -95,9 +95,6 @@ class DetailsFragment : Fragment() {
             }
         }
         when {
-            binding.description.text.textToTrimString().isEmpty() -> {
-                binding.descriptionLayout.error = getString(R.string.error_field_empty)
-            }
             binding.title.text.textToTrimString().length > DESCRIPTION_MAX_LENGTH -> {
                 binding.descriptionLayout.error = getString(R.string.error_field_too_long)
             }
