@@ -3,7 +3,6 @@ package com.wuujcik.todolist.ui.list
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -59,12 +58,7 @@ class TodoListAdapter : PagedListAdapter<Todo, TodoListAdapter.TodoViewHolder>(D
             if (item.iconUrl != null && item.iconUrl != "") {
                 icon_img.load(item.iconUrl)
             } else {
-                icon_img.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        context,
-                        R.drawable.ic_placeholder
-                    )
-                )
+                icon_img.load(  R.drawable.ic_placeholder)
             }
 
             setOnLongClickListener {

@@ -2,10 +2,12 @@ package com.wuujcik.todolist.ui.list
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagedList
 import androidx.paging.toLiveData
 import com.wuujcik.todolist.persistence.*
 import com.wuujcik.todolist.model.TodoProvider
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -16,7 +18,9 @@ class ListViewModel @Inject constructor(private val todoProvider: TodoProvider) 
 
 
     fun deleteTodo(item: Todo) {
-        todoProvider.deleteItem(item)
+        viewModelScope.launch {
+            todoProvider.deleteItem(item, viewModelScope)
+        }
     }
 
     fun invalidateTodos() {
@@ -24,10 +28,14 @@ class ListViewModel @Inject constructor(private val todoProvider: TodoProvider) 
     }
 
     fun attachDatabaseReadListeners() {
-        todoProvider.attachDatabaseReadListeners()
+        viewModelScope.launch {
+            todoProvider.attachDatabaseReadListeners(viewModelScope)
+        }
     }
 
     fun detachDatabaseReadListener() {
-        todoProvider.detachDatabaseReadListener()
+        viewModelScope.launch {
+            todoProvider.detachDatabaseReadListener()
+        }
     }
 }

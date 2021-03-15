@@ -15,14 +15,14 @@ interface TodoDao {
     fun getAllTimestampts(): LiveData<List<Long>>
 
     @Query("SELECT * FROM todo WHERE timestamp = :itemTimestamp")
-    fun getItemByTimestamp(itemTimestamp: Long?): Todo?
+    suspend fun getItemByTimestamp(itemTimestamp: Long?): Todo?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(item: Todo)
+    suspend fun insert(item: Todo)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun update(item: Todo)
+    suspend fun update(item: Todo)
 
     @Query("DELETE FROM todo WHERE timestamp = :key")
-    fun delete(key: Long)
+    suspend fun delete(key: Long)
 }
