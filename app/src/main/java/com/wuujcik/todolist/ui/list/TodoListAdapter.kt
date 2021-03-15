@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.wuujcik.todolist.R
+import com.wuujcik.todolist.databinding.ItemTodoBinding
 import com.wuujcik.todolist.persistence.Todo
 import com.wuujcik.todolist.utils.formatShortDate
-import kotlinx.android.synthetic.main.item_todo.view.*
 
 
 class TodoListAdapter : PagedListAdapter<Todo, TodoListAdapter.TodoViewHolder>(DIFF_CALLBACK) {
@@ -25,9 +25,11 @@ class TodoListAdapter : PagedListAdapter<Todo, TodoListAdapter.TodoViewHolder>(D
     var placeholderView: View? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
-        val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_todo, parent, false)
-        return TodoViewHolder(itemView)
+        return TodoViewHolder(  ItemTodoBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        ))
     }
 
 
@@ -46,26 +48,26 @@ class TodoListAdapter : PagedListAdapter<Todo, TodoListAdapter.TodoViewHolder>(D
     }
 
 
-    inner class TodoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class TodoViewHolder(private val binding: ItemTodoBinding) : RecyclerView.ViewHolder(binding.root) {
         var todo: Todo? = null
 
-        fun bind(item: Todo) = with(itemView) {
+        fun bind(item: Todo) = with(binding) {
             todo = item
             title.text = item.title
             item.timestamp?.let { date ->
-                date_created.text = formatShortDate(context, date)
+                dateCreated.text = formatShortDate(binding.root.context, date)
             }
             if (item.iconUrl != null && item.iconUrl != "") {
-                icon_img.load(item.iconUrl)
+                iconImg.load(item.iconUrl)
             } else {
-                icon_img.load(  R.drawable.ic_placeholder)
+                iconImg.load(  R.drawable.ic_placeholder)
             }
 
-            setOnLongClickListener {
+            binding.root.setOnLongClickListener {
                 onItemLongClicked(item)
                 true
             }
-            setOnClickListener { onItemClicked(item) }
+            binding.root.setOnClickListener { onItemClicked(item) }
         }
     }
 
@@ -84,6 +86,5 @@ class TodoListAdapter : PagedListAdapter<Todo, TodoListAdapter.TodoViewHolder>(D
                 newTodo: Todo
             ) = oldTodo == newTodo
         }
-
     }
 }

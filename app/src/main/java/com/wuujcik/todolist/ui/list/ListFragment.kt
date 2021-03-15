@@ -14,9 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.wuujcik.todolist.R
+import com.wuujcik.todolist.databinding.FragmentListBinding
 import com.wuujcik.todolist.persistence.Todo
 import com.wuujcik.todolist.ui.MainActivity
-import kotlinx.android.synthetic.main.fragment_list.*
 import javax.inject.Inject
 
 
@@ -26,6 +26,7 @@ class ListFragment : Fragment() {
     lateinit var listViewModel: ListViewModel
     private var todoListAdapter: TodoListAdapter? = null
 
+    private lateinit var binding: FragmentListBinding
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -36,7 +37,10 @@ class ListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_list, container, false)
+        return FragmentListBinding.inflate(inflater, container, false)
+            .also {
+                binding = it
+            }.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,7 +48,7 @@ class ListFragment : Fragment() {
         listViewModel.attachDatabaseReadListeners()
         setListAdapter()
 
-        create_new_item.setOnClickListener {
+        binding.createNewItem.setOnClickListener {
             findNavController().navigate(
                 ListFragmentDirections.actionListFragmentToDetailsFragment(
                     null
@@ -63,7 +67,7 @@ class ListFragment : Fragment() {
 
         listViewModel.allTodos.observe(viewLifecycleOwner, { list: PagedList<Todo>? ->
             todoListAdapter?.apply {
-                placeholderView = empty_recycler_view
+                placeholderView = binding.emptyRecyclerView
                 submitList(list)
                 onItemClicked = { data ->
                     findNavController().navigate(
@@ -82,7 +86,7 @@ class ListFragment : Fragment() {
             }
 
         })
-        list_recycler_viewer.apply {
+        with(binding.listRecyclerViewer) {
             adapter = todoListAdapter
             layoutManager = LinearLayoutManager(this.context)
         }
@@ -122,7 +126,7 @@ class ListFragment : Fragment() {
                     listViewModel.deleteTodo(it)
                 }
             }
-        }).attachToRecyclerView(list_recycler_viewer)
+        }).attachToRecyclerView(binding.listRecyclerViewer)
     }
 
 

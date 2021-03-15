@@ -9,13 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.wuujcik.todolist.R
+import com.wuujcik.todolist.databinding.FragmentDetailsBinding
 import com.wuujcik.todolist.model.TodoProvider.Companion.DESCRIPTION_MAX_LENGTH
 import com.wuujcik.todolist.model.TodoProvider.Companion.TITLE_MAX_LENGTH
 import com.wuujcik.todolist.persistence.Todo
 import com.wuujcik.todolist.model.isTodoValid
 import com.wuujcik.todolist.ui.MainActivity
 import com.wuujcik.todolist.utils.textToTrimString
-import kotlinx.android.synthetic.main.fragment_details.*
 import java.util.*
 import javax.inject.Inject
 
@@ -24,9 +24,12 @@ class DetailsFragment : Fragment() {
     @Inject
     lateinit var detailsViewModel: DetailsViewModel
 
+    private lateinit var binding: FragmentDetailsBinding
+
     private var originalItem: Todo? = null
     private val args: DetailsFragmentArgs by navArgs()
     private var editingMode = false
+
 
 
     override fun onAttach(context: Context) {
@@ -38,7 +41,10 @@ class DetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_details, container, false)
+        return FragmentDetailsBinding.inflate(inflater, container, false)
+            .also {
+                binding = it
+            }.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,19 +52,19 @@ class DetailsFragment : Fragment() {
         originalItem = args.data
         originalItem?.let { item ->
             editingMode = true
-            title.setText(item.title)
-            description.setText(item.description)
-            icon.setText(item.iconUrl)
+            binding.title.setText(item.title)
+            binding.description.setText(item.description)
+            binding.icon.setText(item.iconUrl)
         }
-        cancelButton.setOnClickListener { findNavController().navigateUp() }
-        saveButton.setOnClickListener { saveItem() }
+        binding.cancelButton.setOnClickListener { findNavController().navigateUp() }
+        binding.saveButton.setOnClickListener { saveItem() }
     }
 
 
     private fun saveItem() {
-        val title = title.text.textToTrimString()
-        val description = description.text.textToTrimString()
-        val iconUrl = icon.text.textToTrimString()
+        val title = binding.title.text.textToTrimString()
+        val description = binding.description.text.textToTrimString()
+        val iconUrl = binding.icon.text.textToTrimString()
         val timestamp = originalItem?.timestamp ?: Date().time
         val item = Todo(title, description, timestamp, iconUrl)
 
@@ -78,25 +84,25 @@ class DetailsFragment : Fragment() {
 
     private fun validateFields() {
         when {
-            title.text.textToTrimString().isEmpty() -> {
-                title_layout.error = getString(R.string.error_field_empty)
+            binding.title.text.textToTrimString().isEmpty() -> {
+                binding.titleLayout.error = getString(R.string.error_field_empty)
             }
-            title.text.textToTrimString().length > TITLE_MAX_LENGTH -> {
-                title_layout.error = getString(R.string.error_field_too_long)
+            binding.title.text.textToTrimString().length > TITLE_MAX_LENGTH -> {
+                binding.titleLayout.error = getString(R.string.error_field_too_long)
             }
             else -> {
-                title_layout.error = null
+                binding.titleLayout.error = null
             }
         }
         when {
-            description.text.textToTrimString().isEmpty() -> {
-                description_layout.error = getString(R.string.error_field_empty)
+            binding.description.text.textToTrimString().isEmpty() -> {
+                binding.descriptionLayout.error = getString(R.string.error_field_empty)
             }
-            title.text.textToTrimString().length > DESCRIPTION_MAX_LENGTH -> {
-                description_layout.error = getString(R.string.error_field_too_long)
+            binding.title.text.textToTrimString().length > DESCRIPTION_MAX_LENGTH -> {
+                binding.descriptionLayout.error = getString(R.string.error_field_too_long)
             }
             else -> {
-                description_layout.error = null
+                binding.descriptionLayout.error = null
             }
         }
     }
