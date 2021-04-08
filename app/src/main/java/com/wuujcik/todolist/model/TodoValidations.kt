@@ -12,11 +12,12 @@ fun isTodoValid(item: Todo?): Boolean {
     if (item.title.isNullOrEmpty()) {
         return false
     }
-    if (item.title!!.length > TITLE_MAX_LENGTH) {
+
+    if ((item.title?.length ?: 0) > TITLE_MAX_LENGTH) {
         return false
     }
     
-    if (item.description!!.length > DESCRIPTION_MAX_LENGTH) {
+    if ((item.description?.length ?: 0) > DESCRIPTION_MAX_LENGTH) {
         return false
     }
 

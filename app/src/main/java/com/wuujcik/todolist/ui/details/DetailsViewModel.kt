@@ -10,7 +10,7 @@ import javax.inject.Inject
 class DetailsViewModel @Inject constructor(private val todoProvider: TodoProvider) : ViewModel() {
 
     fun createItem(item: Todo) {
-            todoProvider.addItem(item)
+            todoProvider.addItem(item, viewModelScope)
     }
 
     fun updateItem(item: Todo) {

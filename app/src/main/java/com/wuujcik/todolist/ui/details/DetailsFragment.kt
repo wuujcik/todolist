@@ -95,7 +95,7 @@ class DetailsFragment : Fragment() {
             }
         }
         when {
-            binding.title.text.textToTrimString().length > DESCRIPTION_MAX_LENGTH -> {
+            binding.description.text.textToTrimString().length > DESCRIPTION_MAX_LENGTH -> {
                 binding.descriptionLayout.error = getString(R.string.error_field_too_long)
             }
             else -> {
