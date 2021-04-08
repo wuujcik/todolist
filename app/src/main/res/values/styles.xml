@@ -54,7 +54,16 @@
         <item name="backgroundTint">?attr/colorAccent</item>
     </style>
 
-    <style name="Todo.Details" >
+    <style name="Todo.RecyclerList.QuickCreateButton" parent="Widget.MaterialComponents.TimePicker.ImageButton">
+        <item name="android:padding">@dimen/standard_padding</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:scaleType">center</item>
+        <item name="tint">?attr/colorOnPrimary</item>
+        <item name="backgroundTint">@color/colorTranslucent</item>
+    </style>
+
+    <style name="Todo.Details">
         <item name="android:background">?attr/background</item>
     </style>
 

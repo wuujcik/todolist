@@ -24,11 +24,12 @@ class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: Firebas
     val getAll = todoDao.getAll()
 
 
-    fun addItem(item: Todo) {
+    fun addItem(item: Todo, scope: CoroutineScope) {
         addItemToFirebase(item)
+        addItemToRoom(item, scope)
     }
 
-    fun addItemToRoom(item: Todo, scope: CoroutineScope) {
+    private fun addItemToRoom(item: Todo, scope: CoroutineScope) {
         if (isTodoValid(item)) {
             scope.launch {
                 todoDao.insert(item)

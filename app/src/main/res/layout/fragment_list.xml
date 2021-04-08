@@ -5,9 +5,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/title_layout"
+        style="@style/Todo.Details.Layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:counterEnabled="true"
+        app:counterMaxLength="@integer/title_max_value"
+        app:errorEnabled="true"
+        app:layout_constraintEnd_toStartOf="@+id/quick_create_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/title"
+            style="@style/Todo.Details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/quick_task_hint"
+            android:maxLength="@integer/title_max_value"
+            android:nextFocusForward="@+id/description" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageButton
+        android:id="@+id/quick_create_button"
+        style="@style/Todo.RecyclerList.QuickCreateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_send"
+        app:layout_constraintTop_toTopOf="@+id/title_layout"
+        app:layout_constraintBottom_toBottomOf="@+id/title_layout"
+        app:layout_constraintStart_toEndOf="@+id/title_layout"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/title_layout"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list_recycler_viewer"

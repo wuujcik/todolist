@@ -15,8 +15,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.wuujcik.todolist.R
 import com.wuujcik.todolist.databinding.FragmentListBinding
+import com.wuujcik.todolist.model.TodoProvider
+import com.wuujcik.todolist.model.isTodoValid
 import com.wuujcik.todolist.persistence.Todo
 import com.wuujcik.todolist.ui.MainActivity
+import com.wuujcik.todolist.utils.hideKeyboard
+import com.wuujcik.todolist.utils.textToTrimString
+import java.util.*
 import javax.inject.Inject
 
 
@@ -54,6 +59,10 @@ class ListFragment : Fragment() {
                     null
                 )
             )
+        }
+
+        binding.quickCreateButton.setOnClickListener {
+            saveQuickItem()
         }
     }
 
@@ -127,6 +136,37 @@ class ListFragment : Fragment() {
                 }
             }
         }).attachToRecyclerView(binding.listRecyclerViewer)
+    }
+
+
+    private fun saveQuickItem() {
+        val title = binding.title.text.textToTrimString()
+        val timestamp = Date().time
+        val item = Todo(title, null, timestamp, null)
+
+        if (!isTodoValid(item)) {
+            showValidationErrors()
+            return
+        }
+        listViewModel.createQuickItem(item)
+        binding.title.setText("") // TODO: add verification of success and handle errors
+        activity?.let{
+            hideKeyboard(it, binding.root)
+        }
+    }
+
+    private fun showValidationErrors() {
+        when {
+            binding.title.text.textToTrimString().isEmpty() -> {
+                binding.titleLayout.error = getString(R.string.error_field_empty)
+            }
+            binding.title.text.textToTrimString().length > TodoProvider.TITLE_MAX_LENGTH -> {
+                binding.titleLayout.error = getString(R.string.error_field_too_long)
+            }
+            else -> {
+                binding.titleLayout.error = null
+            }
+        }
     }
 
 

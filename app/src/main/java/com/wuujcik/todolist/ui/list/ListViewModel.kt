@@ -38,4 +38,8 @@ class ListViewModel @Inject constructor(private val todoProvider: TodoProvider) 
             todoProvider.detachDatabaseReadListener()
         }
     }
+
+    fun createQuickItem(item: Todo) {
+        todoProvider.addItem(item, viewModelScope)
+    }
 }
