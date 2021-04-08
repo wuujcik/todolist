@@ -150,9 +150,6 @@ class ListFragment : Fragment() {
         }
         listViewModel.createQuickItem(item)
         binding.title.setText("") // TODO: add verification of success and handle errors
-        activity?.let{
-            hideKeyboard(it, binding.root)
-        }
     }
 
     private fun showValidationErrors() {
