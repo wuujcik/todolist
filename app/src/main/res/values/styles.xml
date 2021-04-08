@@ -59,8 +59,8 @@
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
         <item name="android:scaleType">center</item>
-        <item name="tint">?attr/colorOnPrimary</item>
-        <item name="backgroundTint">@color/colorTranslucent</item>
+        <item name="tint">?attr/colorSecondary</item>
+        <item name="backgroundTint">?attr/background</item>
     </style>
 
     <style name="Todo.Details">
