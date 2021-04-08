@@ -142,7 +142,7 @@ class ListFragment : Fragment() {
     private fun saveQuickItem() {
         val title = binding.title.text.textToTrimString()
         val timestamp = Date().time
-        val item = Todo(title, null, timestamp, null)
+        val item = Todo(title, "", timestamp, null)
 
         if (!isTodoValid(item)) {
             showValidationErrors()
