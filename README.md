@@ -7,7 +7,14 @@ For synchronisation between devices, you need to:
 ##### 1. Clone this repository to your computer
 ##### 2. Create Firebase project [here](https://console.firebase.google.com/u/0/)
 ##### 3. Add an android app by clicking on Android icon
-Register your app with package name `com.wuujcik.todolist`
+Register your app with your package name. Currently its set to `com.wuujcik.todolist`, but you might want to update it in [buld.gradle](https://github.com/wuujcik/todolist/blob/master/app/build.gradle) under 
+```
+android {
+    defaultConfig {
+        applicationId "com.wuujcik.todolist" // here
+    }
+}
+```
 ##### 4. Download `google-services.json` 
 Save it in your local copy of the repository in `app` folder.
 Then just click next in firebase.
