@@ -15,6 +15,7 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/top_app_bar"
             style="@style/Todo.Toolbar"
+            app:menu="@menu/drawer_view"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/ThemeOverlay.MaterialComponents.Light"

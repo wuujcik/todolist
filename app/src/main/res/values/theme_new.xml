@@ -1,0 +1,29 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.Todo.New" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/new_color_primary</item>
+        <item name="colorPrimaryVariant">@color/new_color_primary_variant</item>
+        <item name="colorOnPrimary">@color/new_color_on_primary</item>
+        <item name="colorAccent">@color/new_color_accent</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/new_color_secondary</item>
+        <item name="colorSecondaryVariant">@color/new_color_secondary_variant</item>
+        <item name="colorOnSecondary">@color/new_color_on_secondary</item>
+
+        <!-- Status bar colors -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="colorControlNormal">?attr/colorOnPrimary</item>
+        <item name="colorControlHighlight">?attr/colorPrimaryVariant</item>
+
+        <item name="toolbarStyle">@style/ToolbarStyleNew</item>
+        <item name="backgroundColor">@color/new_color_for_tiles</item>
+        <item name="background">?attr/colorOnSecondary</item>
+    </style>
+
+    <style name="ToolbarStyleNew" parent="@style/Widget.AppCompat.Toolbar">
+        <!-- Makes the toolbar text whatever color you want for both light/dark-->
+        <item name="titleTextColor">?attr/colorOnPrimary</item>
+        <item name="android:background">?attr/colorPrimary</item>
+    </style>
+</resources>
