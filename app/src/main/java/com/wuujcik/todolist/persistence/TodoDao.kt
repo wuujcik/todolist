@@ -25,4 +25,7 @@ interface TodoDao {
 
     @Query("DELETE FROM todo WHERE timestamp = :key")
     suspend fun delete(key: Long)
+
+    @Query("DELETE FROM todo")
+    suspend fun deleteAll()
 }

@@ -3,7 +3,6 @@ package com.wuujcik.todolist.ui
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
@@ -12,14 +11,15 @@ import com.wuujcik.todolist.R
 import com.wuujcik.todolist.TodoListApp
 import com.wuujcik.todolist.databinding.ActivityMainBinding
 import com.wuujcik.todolist.di.MainActivityComponent
+import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
 
+    @Inject  lateinit var viewModel: MainViewModel
     lateinit var mainActivityComponent: MainActivityComponent
     private lateinit var binding: ActivityMainBinding
     private var database: FirebaseDatabase? = null
-    private val viewModel by viewModels<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -48,6 +48,8 @@ class MainActivity : AppCompatActivity() {
     private fun setupAppBarMenu() {
         binding.topAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
+                R.id.menu_refresh -> {
+                    viewModel.refreshFromFirebase()
                     true
                 }
 //                R.id.menu_theme_standard -> {

@@ -5,8 +5,8 @@
     tools:context=".ui.list.MainActivity">
 
     <item
-        android:id="@+id/menu_theme_standard"
-        android:title="@string/drawer_theme_standard"
+        android:id="@+id/menu_refresh"
+        android:title="@string/drawer_refresh"
         app:showAsAction="never" />
 
 <!--    <item-->

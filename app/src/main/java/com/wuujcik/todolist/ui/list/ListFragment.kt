@@ -27,8 +27,7 @@ import javax.inject.Inject
 
 class ListFragment : Fragment() {
 
-    @Inject
-    lateinit var listViewModel: ListViewModel
+    @Inject  lateinit var listViewModel: ListViewModel
     private var todoListAdapter: TodoListAdapter? = null
 
     private lateinit var binding: FragmentListBinding

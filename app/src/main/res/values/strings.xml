@@ -5,6 +5,7 @@
     <string name="button_cancel">Cancel</string>
 
     <!-- drawer menu -->
+    <string name="drawer_refresh">Refresh</string>
     <string name="drawer_theme_blue">Blue theme</string>
     <string name="drawer_theme_standard">Standard theme</string>
 
