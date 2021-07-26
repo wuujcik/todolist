@@ -9,8 +9,13 @@
         android:title="@string/drawer_theme_standard"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/menu_theme_blue"
-        android:title="@string/drawer_theme_blue"
-        app:showAsAction="never" />
+<!--    <item-->
+<!--        android:id="@+id/menu_theme_standard"-->
+<!--        android:title="@string/drawer_theme_standard"-->
+<!--        app:showAsAction="never" />-->
+
+<!--    <item-->
+<!--        android:id="@+id/menu_theme_blue"-->
+<!--        android:title="@string/drawer_theme_blue"-->
+<!--        app:showAsAction="never" />-->
 </menu>

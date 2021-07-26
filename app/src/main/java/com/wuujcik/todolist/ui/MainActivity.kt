@@ -48,20 +48,22 @@ class MainActivity : AppCompatActivity() {
     private fun setupAppBarMenu() {
         binding.topAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.menu_theme_standard -> {
-                    if (viewModel.themeId != R.style.Theme_Todo) {
-                        viewModel.changeTheme(R.style.Theme_Todo)
-                        recreate()
-                    }
                     true
                 }
-                R.id.menu_theme_blue -> {
-                    if (viewModel.themeId != R.style.Theme_Todo_New) {
-                        viewModel.changeTheme(R.style.Theme_Todo_New)
-                        recreate()
-                    }
-                    true
-                }
+//                R.id.menu_theme_standard -> {
+//                    if (viewModel.themeId != R.style.Theme_Todo) {
+//                        viewModel.changeTheme(R.style.Theme_Todo)
+//                        recreate()
+//                    }
+//                    true
+//                }
+//                R.id.menu_theme_blue -> {
+//                    if (viewModel.themeId != R.style.Theme_Todo_New) {
+//                        viewModel.changeTheme(R.style.Theme_Todo_New)
+//                        recreate()
+//                    }
+//                    true
+//                }
                 else -> false
             }
         }
