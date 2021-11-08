@@ -15,20 +15,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.wuujcik.todolist.R
 import com.wuujcik.todolist.databinding.FragmentListBinding
-import com.wuujcik.todolist.model.TodoProvider
-import com.wuujcik.todolist.model.isTodoValid
-import com.wuujcik.todolist.persistence.Todo
+import com.wuujcik.todolist.persistence.Meal
 import com.wuujcik.todolist.ui.MainActivity
-import com.wuujcik.todolist.utils.hideKeyboard
-import com.wuujcik.todolist.utils.textToTrimString
-import java.util.*
 import javax.inject.Inject
 
 
 class ListFragment : Fragment() {
 
     @Inject  lateinit var listViewModel: ListViewModel
-    private var todoListAdapter: TodoListAdapter? = null
+    private var mealListAdapter: MealListAdapter? = null
 
     private lateinit var binding: FragmentListBinding
 
@@ -60,9 +55,9 @@ class ListFragment : Fragment() {
             )
         }
 
-        binding.quickCreateButton.setOnClickListener {
-            saveQuickItem()
-        }
+//        binding.quickCreateButton.setOnClickListener {
+//            saveQuickItem()
+//        }
     }
 
     override fun onStop() {
@@ -71,10 +66,10 @@ class ListFragment : Fragment() {
     }
 
     private fun setListAdapter() {
-        todoListAdapter = TodoListAdapter()
+        mealListAdapter = MealListAdapter()
 
-        listViewModel.allTodos.observe(viewLifecycleOwner, { list: PagedList<Todo>? ->
-            todoListAdapter?.apply {
+        listViewModel.allMeals.observe(viewLifecycleOwner, { list: PagedList<Meal>? ->
+            mealListAdapter?.apply {
                 placeholderView = binding.emptyRecyclerView
                 submitList(list)
                 onItemClicked = { data ->
@@ -95,19 +90,19 @@ class ListFragment : Fragment() {
 
         })
         with(binding.listRecyclerViewer) {
-            adapter = todoListAdapter
+            adapter = mealListAdapter
             layoutManager = LinearLayoutManager(this.context)
         }
-        swipeToDelete()
+//        swipeToDelete()
     }
 
-    private fun showDialog(item: Todo) {
+    private fun showDialog(item: Meal) {
         AlertDialog.Builder(this.context, R.style.AlertDialog)
             .setTitle(R.string.delete)
             .setMessage(R.string.delete_confirm_text)
             .setNegativeButton(R.string.yes) { _, _ ->
-                listViewModel.deleteTodo(item)
-                listViewModel.invalidateTodos()
+                listViewModel.deleteMeal(item)
+                listViewModel.invalidateMeals()
             }
             .setNeutralButton(R.string.button_cancel) { dialog, _ ->
                 dialog.dismiss()
@@ -129,41 +124,41 @@ class ListFragment : Fragment() {
             ): Boolean = false
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                (viewHolder as TodoListAdapter.TodoViewHolder).todo?.let {
-                    listViewModel.invalidateTodos()
-                    listViewModel.deleteTodo(it)
+                (viewHolder as MealListAdapter.TodoViewHolder).meal?.let {
+                    listViewModel.invalidateMeals()
+                    listViewModel.deleteMeal(it)
                 }
             }
         }).attachToRecyclerView(binding.listRecyclerViewer)
     }
 
 
-    private fun saveQuickItem() {
-        val title = binding.title.text.textToTrimString()
-        val timestamp = Date().time
-        val item = Todo(title, "", timestamp, null)
-
-        if (!isTodoValid(item)) {
-            showValidationErrors()
-            return
-        }
-        listViewModel.createQuickItem(item)
-        binding.title.setText("") // TODO: add verification of success and handle errors
-    }
-
-    private fun showValidationErrors() {
-        when {
-            binding.title.text.textToTrimString().isEmpty() -> {
-                binding.titleLayout.error = getString(R.string.error_field_empty)
-            }
-            binding.title.text.textToTrimString().length > TodoProvider.TITLE_MAX_LENGTH -> {
-                binding.titleLayout.error = getString(R.string.error_field_too_long)
-            }
-            else -> {
-                binding.titleLayout.error = null
-            }
-        }
-    }
+//    private fun saveQuickItem() {
+//        val title = binding.title.text.textToTrimString()
+//        val timestamp = Date().time
+//        val item = Todo(title, "", timestamp, null)
+//
+//        if (!isTodoValid(item)) {
+//            showValidationErrors()
+//            return
+//        }
+//        listViewModel.createQuickItem(item)
+//        binding.title.setText("") // TODO: add verification of success and handle errors
+//    }
+//
+//    private fun showValidationErrors() {
+//        when {
+//            binding.title.text.textToTrimString().isEmpty() -> {
+//                binding.titleLayout.error = getString(R.string.error_field_empty)
+//            }
+//            binding.title.text.textToTrimString().length > TodoProvider.TITLE_MAX_LENGTH -> {
+//                binding.titleLayout.error = getString(R.string.error_field_too_long)
+//            }
+//            else -> {
+//                binding.titleLayout.error = null
+//            }
+//        }
+//    }
 
 
     companion object {

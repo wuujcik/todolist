@@ -25,7 +25,7 @@
         tools:layout="@layout/fragment_details" >
         <argument
             android:name="data"
-            app:argType="com.wuujcik.todolist.persistence.Todo"
+            app:argType="com.wuujcik.todolist.persistence.Meal"
             app:nullable="true"
             />
 

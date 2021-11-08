@@ -19,10 +19,10 @@ import kotlin.jvm.Throws
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [28])
-class TodoDaoTests {
+class MealDaoTests {
 
     private lateinit var database: RoomDatabase
-    private lateinit var todoDao: TodoDao
+    private lateinit var mealDao: MealDao
 
     @Before
     fun initDbAndDao() {
@@ -30,7 +30,7 @@ class TodoDaoTests {
             ApplicationProvider.getApplicationContext(),
             RoomDatabase::class.java
         ).allowMainThreadQueries().build()
-        todoDao = database.todoDao()
+        mealDao = database.mealDao()
     }
 
     @After
@@ -40,18 +40,18 @@ class TodoDaoTests {
     fun insertItemAndGetById() = runBlocking {
         // GIVEN
         val time = Date().time
-        val item = Todo("title", "description", time, "iconUrl")
-        todoDao.insert(item)
+        val item = Meal("title", "description", time, 0)
+        mealDao.insert(item)
 
         // WHEN
-        val loaded = todoDao.getItemByTimestamp(item.timestamp)
+        val loaded = mealDao.getItemByTimestamp(item.timestamp)
 
         // THEN
-        assertThat<Todo>(loaded as Todo, CoreMatchers.notNullValue())
+        assertThat<Meal>(loaded as Meal, CoreMatchers.notNullValue())
         assertThat(loaded.timestamp, `is`(item.timestamp))
         assertThat(loaded.title, `is`(item.title))
         assertThat(loaded.description, `is`(item.description))
-        assertThat(loaded.iconUrl, `is`(item.iconUrl))
+        assertThat(loaded.mealType, `is`(item.mealType))
     }
 
     @Test
@@ -59,14 +59,14 @@ class TodoDaoTests {
     fun insertAndDelete() = runBlocking {
         // GIVEN
         val time = Date().time
-        val item = Todo("title", "description", time, "url")
-        todoDao.insert(item)
+        val item = Meal("title", "description", time, 0)
+        mealDao.insert(item)
 
         // WHEN
-        todoDao.delete(time)
+        mealDao.delete(time)
 
         // THEN
-        val result = todoDao.getItemByTimestamp(time)
+        val result = mealDao.getItemByTimestamp(time)
         assertThat(result, CoreMatchers.`is`(CoreMatchers.nullValue()))
     }
 
@@ -75,15 +75,15 @@ class TodoDaoTests {
     fun insertAndUpdate() = runBlocking {
         // GIVEN
         val time = Date().time
-        val item = Todo("title", "description", time, "url")
-        todoDao.insert(item)
+        val item = Meal("title", "description", time, 0)
+        mealDao.insert(item)
 
         // WHEN
-        val updatedItem = Todo("updatedTitle", "updatedDescription", time, "ipdatedUrl")
-        todoDao.update(updatedItem)
+        val updatedItem = Meal("updatedTitle", "updatedDescription", time, 1)
+        mealDao.update(updatedItem)
 
         // THEN
-        val result = todoDao.getItemByTimestamp(time)
+        val result = mealDao.getItemByTimestamp(time)
         assertThat(result, equalTo(updatedItem))
     }
 }

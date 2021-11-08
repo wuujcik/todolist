@@ -9,27 +9,29 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.wuujcik.todolist.R
-import com.wuujcik.todolist.databinding.ItemTodoBinding
-import com.wuujcik.todolist.persistence.Todo
+import com.wuujcik.todolist.databinding.ItemMealBinding
+import com.wuujcik.todolist.persistence.Meal
 import com.wuujcik.todolist.utils.formatShortDate
 
 
-class TodoListAdapter : PagedListAdapter<Todo, TodoListAdapter.TodoViewHolder>(DIFF_CALLBACK) {
+class MealListAdapter : PagedListAdapter<Meal, MealListAdapter.TodoViewHolder>(DIFF_CALLBACK) {
 
     /** Callback when user click on holder */
-    var onItemClicked: (item: Todo) -> Unit = {}
-    var onItemLongClicked: (item: Todo) -> Unit = {}
+    var onItemClicked: (item: Meal) -> Unit = {}
+    var onItemLongClicked: (item: Meal) -> Unit = {}
     var onErrorMessage: (message: String) -> Unit = {}
 
     /** Optional placeholder that is visible when there is no data */
     var placeholderView: View? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
-        return TodoViewHolder(  ItemTodoBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        ))
+        return TodoViewHolder(
+            ItemMealBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
 
@@ -39,8 +41,8 @@ class TodoListAdapter : PagedListAdapter<Todo, TodoListAdapter.TodoViewHolder>(D
     }
 
     override fun onCurrentListChanged(
-        previousList: PagedList<Todo>?,
-        currentList: PagedList<Todo>?
+        previousList: PagedList<Meal>?,
+        currentList: PagedList<Meal>?
     ) {
         val count = currentList?.size ?: 0
         placeholderView?.visibility = if (count > 0) View.GONE else View.VISIBLE
@@ -48,19 +50,26 @@ class TodoListAdapter : PagedListAdapter<Todo, TodoListAdapter.TodoViewHolder>(D
     }
 
 
-    inner class TodoViewHolder(private val binding: ItemTodoBinding) : RecyclerView.ViewHolder(binding.root) {
-        var todo: Todo? = null
+    inner class TodoViewHolder(private val binding: ItemMealBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        var meal: Meal? = null
 
-        fun bind(item: Todo) = with(binding) {
-            todo = item
+        fun bind(item: Meal) = with(binding) {
+            meal = item
             title.text = item.title
             item.timestamp?.let { date ->
                 dateCreated.text = formatShortDate(binding.root.context, date)
             }
-            if (item.iconUrl != null && item.iconUrl != "") {
-                iconImg.load(item.iconUrl)
-            } else {
-                iconImg.load(  R.drawable.ic_placeholder)
+            when (item.mealType) {
+                0 -> {
+                    iconImg.load(R.drawable.ic_test)
+                }
+                1 -> {
+                    iconImg.load(R.drawable.ic_now)
+                }
+                2 -> {
+                    iconImg.load(R.drawable.ic_good)
+                }
             }
 
             binding.root.setOnLongClickListener {
@@ -73,18 +82,18 @@ class TodoListAdapter : PagedListAdapter<Todo, TodoListAdapter.TodoViewHolder>(D
 
 
     companion object {
-        const val TAG = "TodoListAdapter"
+        const val TAG = "MealListAdapter"
         private val DIFF_CALLBACK = object :
-            DiffUtil.ItemCallback<Todo>() {
+            DiffUtil.ItemCallback<Meal>() {
             override fun areItemsTheSame(
-                oldTodo: Todo,
-                newTodo: Todo
-            ) = oldTodo.timestamp == newTodo.timestamp
+                oldMeal: Meal,
+                newMeal: Meal
+            ) = oldMeal.timestamp == newMeal.timestamp
 
             override fun areContentsTheSame(
-                oldTodo: Todo,
-                newTodo: Todo
-            ) = oldTodo == newTodo
+                oldMeal: Meal,
+                newMeal: Meal
+            ) = oldMeal == newMeal
         }
     }
 }

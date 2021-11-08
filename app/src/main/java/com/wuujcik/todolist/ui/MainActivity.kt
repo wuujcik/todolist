@@ -8,15 +8,17 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.wuujcik.todolist.R
-import com.wuujcik.todolist.TodoListApp
+import com.wuujcik.todolist.MealListApp
 import com.wuujcik.todolist.databinding.ActivityMainBinding
 import com.wuujcik.todolist.di.MainActivityComponent
+import com.wuujcik.todolist.utils.internetAvailable
 import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
 
-    @Inject  lateinit var viewModel: MainViewModel
+    @Inject
+    lateinit var viewModel: MainViewModel
     lateinit var mainActivityComponent: MainActivityComponent
     private lateinit var binding: ActivityMainBinding
     private var database: FirebaseDatabase? = null
@@ -24,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         mainActivityComponent =
-            (application as TodoListApp).appComponent.mainActivityComponent().create()
+            (application as MealListApp).appComponent.mainActivityComponent().create()
         mainActivityComponent.inject(this)
 
         super.onCreate(savedInstanceState)
@@ -37,6 +39,10 @@ class MainActivity : AppCompatActivity() {
             database = Firebase.database
         }
         setupAppBarMenu()
+
+        if (internetAvailable(application as MealListApp)) {
+            viewModel.refreshFromFirebase()
+        }
     }
 
     override fun getTheme(): Resources.Theme {
@@ -52,20 +58,6 @@ class MainActivity : AppCompatActivity() {
                     viewModel.refreshFromFirebase()
                     true
                 }
-//                R.id.menu_theme_standard -> {
-//                    if (viewModel.themeId != R.style.Theme_Todo) {
-//                        viewModel.changeTheme(R.style.Theme_Todo)
-//                        recreate()
-//                    }
-//                    true
-//                }
-//                R.id.menu_theme_blue -> {
-//                    if (viewModel.themeId != R.style.Theme_Todo_New) {
-//                        viewModel.changeTheme(R.style.Theme_Todo_New)
-//                        recreate()
-//                    }
-//                    true
-//                }
                 else -> false
             }
         }

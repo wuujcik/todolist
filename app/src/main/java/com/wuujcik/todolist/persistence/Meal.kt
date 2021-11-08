@@ -5,8 +5,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
 
-@Entity(tableName = "todo")
-data class Todo(
+@Entity(tableName = "meal")
+data class Meal(
 
     @ColumnInfo(name = "title")
     var title: String? = null,
@@ -18,6 +18,6 @@ data class Todo(
     @ColumnInfo(name = "timestamp")
     var timestamp: Long? = null,
 
-    @ColumnInfo(name = "iconUrl")
-    var iconUrl: String? = null
+    @ColumnInfo(name = "mealType")
+    var mealType: Int? = null
 ) : Serializable

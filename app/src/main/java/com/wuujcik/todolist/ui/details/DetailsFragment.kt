@@ -2,22 +2,29 @@ package com.wuujcik.todolist.ui.details
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.wuujcik.todolist.R
 import com.wuujcik.todolist.databinding.FragmentDetailsBinding
-import com.wuujcik.todolist.model.TodoProvider.Companion.DESCRIPTION_MAX_LENGTH
-import com.wuujcik.todolist.model.TodoProvider.Companion.TITLE_MAX_LENGTH
-import com.wuujcik.todolist.persistence.Todo
-import com.wuujcik.todolist.model.isTodoValid
+import com.wuujcik.todolist.model.MealProvider.Companion.DESCRIPTION_MAX_LENGTH
+import com.wuujcik.todolist.model.MealProvider.Companion.TITLE_MAX_LENGTH
+import com.wuujcik.todolist.persistence.Meal
+import com.wuujcik.todolist.model.isMealValid
 import com.wuujcik.todolist.ui.MainActivity
 import com.wuujcik.todolist.utils.textToTrimString
 import java.util.*
 import javax.inject.Inject
+import android.widget.RadioButton
+
+
+
+
 
 class DetailsFragment : Fragment() {
 
@@ -26,10 +33,9 @@ class DetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailsBinding
 
-    private var originalItem: Todo? = null
+    private var originalItem: Meal? = null
     private val args: DetailsFragmentArgs by navArgs()
     private var editingMode = false
-
 
 
     override fun onAttach(context: Context) {
@@ -40,7 +46,7 @@ class DetailsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return FragmentDetailsBinding.inflate(inflater, container, false)
             .also {
                 binding = it
@@ -54,7 +60,13 @@ class DetailsFragment : Fragment() {
             editingMode = true
             binding.title.setText(item.title)
             binding.description.setText(item.description)
-            binding.icon.setText(item.iconUrl)
+            val radioButtonId = when (item.mealType) {
+                0 -> R.id.test_rb
+                1 -> R.id.now_rb
+                2 -> R.id.good_rb
+                else -> -1
+            }
+            binding.radioGroup.check(radioButtonId)
         }
         binding.cancelButton.setOnClickListener { findNavController().navigateUp() }
         binding.saveButton.setOnClickListener { saveItem() }
@@ -64,11 +76,11 @@ class DetailsFragment : Fragment() {
     private fun saveItem() {
         val title = binding.title.text.textToTrimString()
         val description = binding.description.text.textToTrimString()
-        val iconUrl = binding.icon.text.textToTrimString()
+        val mealType = getMealTypeIndex(binding.radioGroup)
         val timestamp = originalItem?.timestamp ?: Date().time
-        val item = Todo(title, description, timestamp, iconUrl)
+        val item = Meal(title, description, timestamp, mealType)
 
-        if (!isTodoValid(item)) {
+        if (!isMealValid(item)) {
             validateFields()
             return
         }
@@ -102,5 +114,17 @@ class DetailsFragment : Fragment() {
                 binding.descriptionLayout.error = null
             }
         }
+    }
+
+    private fun getMealTypeIndex(radioGroup: RadioGroup): Int? {
+        return when (radioGroup.checkedRadioButtonId) {
+            R.id.test_rb -> 0
+            R.id.now_rb ->  1
+            R.id.good_rb ->  2
+            else -> null
+        }
+    }
+    private fun selectRadioButton(index: Int){
+
     }
 }

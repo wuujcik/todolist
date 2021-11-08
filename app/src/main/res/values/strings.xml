@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ToDo</string>
+    <string name="app_name">Food list</string>
     <string name="loading">Loading…</string>
     <string name="button_save">Save</string>
     <string name="button_cancel">Cancel</string>
@@ -10,21 +10,24 @@
     <string name="drawer_theme_standard">Standard theme</string>
 
     <!-- item details -->
-    <string name="title_hint">Set your task</string>
-    <string name="description_hint">Add description</string>
-    <string name="icon_hint">Add icon url address</string>
+    <string name="title_hint">Meal name</string>
+    <string name="description_hint">Add link or instructions</string>
+    <string name="icon_hint">Write: \"test\", \"now\" or \"good\"</string>
+    <string name="test">Test</string>
+    <string name="now">This week</string>
+    <string name="good">Good</string>
 
     <!-- list -->
     <string name="failed_to_load_todos">Failed to load the list.</string>
-    <string name="quick_task_hint">Add a task</string>
+    <string name="quick_task_hint">Add a meal</string>
 
     <!-- dialogs -->
     <string name="delete">Delete</string>
-    <string name="delete_confirm_text">Are you sure you want to delete this item?</string>
+    <string name="delete_confirm_text">Are you sure you want to delete this meal?</string>
     <string name="yes">yes</string>
     <string name="error_field_empty">Cannot be empty</string>
     <string name="error_field_too_long">Text is too long</string>
-    <string name="add_items_to_your_list">Add items to your list</string>
+    <string name="add_items_to_your_list">Add meals to your list</string>
     <string name="img_url_error">Some of your icon urls couldn\'t be parsed to an image</string>
     <string name="add">add</string>
 

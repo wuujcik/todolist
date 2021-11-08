@@ -2,20 +2,20 @@ package com.wuujcik.todolist.ui.details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.wuujcik.todolist.model.TodoProvider
-import com.wuujcik.todolist.persistence.Todo
+import com.wuujcik.todolist.model.MealProvider
+import com.wuujcik.todolist.persistence.Meal
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class DetailsViewModel @Inject constructor(private val todoProvider: TodoProvider) : ViewModel() {
+class DetailsViewModel @Inject constructor(private val mealProvider: MealProvider) : ViewModel() {
 
-    fun createItem(item: Todo) {
-            todoProvider.addItem(item, viewModelScope)
+    fun createItem(item: Meal) {
+            mealProvider.addItem(item, viewModelScope)
     }
 
-    fun updateItem(item: Todo) {
+    fun updateItem(item: Meal) {
         viewModelScope.launch {
-            todoProvider.updateItem(item, viewModelScope)
+            mealProvider.updateItem(item, viewModelScope)
         }
     }
 }

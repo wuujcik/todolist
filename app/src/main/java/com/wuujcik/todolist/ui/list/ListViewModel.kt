@@ -6,40 +6,40 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagedList
 import androidx.paging.toLiveData
 import com.wuujcik.todolist.persistence.*
-import com.wuujcik.todolist.model.TodoProvider
+import com.wuujcik.todolist.model.MealProvider
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-class ListViewModel @Inject constructor(private val todoProvider: TodoProvider) : ViewModel() {
+class ListViewModel @Inject constructor(private val mealProvider: MealProvider) : ViewModel() {
 
 
-    val allTodos: LiveData<PagedList<Todo>> = todoProvider.getAll.toLiveData(30)
+    val allMeals: LiveData<PagedList<Meal>> = mealProvider.getAll.toLiveData(30)
 
 
-    fun deleteTodo(item: Todo) {
+    fun deleteMeal(item: Meal) {
         viewModelScope.launch {
-            todoProvider.deleteItem(item, viewModelScope)
+            mealProvider.deleteItem(item, viewModelScope)
         }
     }
 
-    fun invalidateTodos() {
-        allTodos.value?.dataSource?.invalidate()
+    fun invalidateMeals() {
+        allMeals.value?.dataSource?.invalidate()
     }
 
     fun attachDatabaseReadListeners() {
         viewModelScope.launch {
-            todoProvider.attachDatabaseReadListeners(viewModelScope)
+            mealProvider.attachDatabaseReadListeners(viewModelScope)
         }
     }
 
     fun detachDatabaseReadListener() {
         viewModelScope.launch {
-            todoProvider.detachDatabaseReadListener()
+            mealProvider.detachDatabaseReadListener()
         }
     }
 
-    fun createQuickItem(item: Todo) {
-        todoProvider.addItem(item, viewModelScope)
+    fun createQuickItem(item: Meal) {
+        mealProvider.addItem(item, viewModelScope)
     }
 }

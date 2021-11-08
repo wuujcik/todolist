@@ -1,11 +1,11 @@
 package com.wuujcik.todolist.model
 
-import com.wuujcik.todolist.model.TodoProvider.Companion.DESCRIPTION_MAX_LENGTH
-import com.wuujcik.todolist.model.TodoProvider.Companion.TITLE_MAX_LENGTH
-import com.wuujcik.todolist.persistence.Todo
+import com.wuujcik.todolist.model.MealProvider.Companion.DESCRIPTION_MAX_LENGTH
+import com.wuujcik.todolist.model.MealProvider.Companion.TITLE_MAX_LENGTH
+import com.wuujcik.todolist.persistence.Meal
 
 
-fun isTodoValid(item: Todo?): Boolean {
+fun isMealValid(item: Meal?): Boolean {
 
     item ?: return false
 

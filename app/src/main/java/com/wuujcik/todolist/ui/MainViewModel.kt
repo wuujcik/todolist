@@ -3,10 +3,10 @@ package com.wuujcik.todolist.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wuujcik.todolist.R
-import com.wuujcik.todolist.model.TodoProvider
+import com.wuujcik.todolist.model.MealProvider
 import javax.inject.Inject
 
-class MainViewModel @Inject constructor(private val todoProvider: TodoProvider) : ViewModel() {
+class MainViewModel @Inject constructor(private val mealProvider: MealProvider) : ViewModel() {
 
     var themeId = R.style.Theme_Todo
 
@@ -15,6 +15,6 @@ class MainViewModel @Inject constructor(private val todoProvider: TodoProvider) 
     }
 
     fun refreshFromFirebase() {
-        todoProvider.refreshFromFirebase(viewModelScope)
+        mealProvider.refreshFromFirebase(viewModelScope)
     }
 }

@@ -7,15 +7,15 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.wuujcik.todolist"
-        minSdkVersion 21
-        targetSdkVersion 30
-        versionCode 210200
-        versionName "21.02.00"
+        minSdkVersion 23
+        targetSdkVersion 31
+        versionCode 211100
+        versionName "21.11.00"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 

@@ -7,8 +7,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.wuujcik.todolist.di.ActivityScope
-import com.wuujcik.todolist.persistence.Todo
-import com.wuujcik.todolist.persistence.TodoDao
+import com.wuujcik.todolist.persistence.Meal
+import com.wuujcik.todolist.persistence.MealDao
 import com.wuujcik.todolist.ui.list.ListFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -16,51 +16,51 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @ActivityScope
-class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: FirebaseDatabase) {
+class MealProvider @Inject constructor(val mealDao: MealDao, firebaseDb: FirebaseDatabase) {
 
     private var itemsEventListener: ChildEventListener? = null
     private val itemsReference = firebaseDb.reference.child(ITEMS_KEY)
 
 
-    val getAll = todoDao.getAll()
+    val getAll = mealDao.getAll()
 
 
-    fun addItem(item: Todo, scope: CoroutineScope) {
+    fun addItem(item: Meal, scope: CoroutineScope) {
         addItemToFirebase(item)
         addItemToRoom(item, scope)
     }
 
-    private fun addItemToRoom(item: Todo, scope: CoroutineScope) {
-        if (isTodoValid(item)) {
+    private fun addItemToRoom(item: Meal, scope: CoroutineScope) {
+        if (isMealValid(item)) {
             scope.launch {
-                todoDao.insert(item)
+                mealDao.insert(item)
             }
         }
     }
 
-    private fun addItemToFirebase(item: Todo) {
+    private fun addItemToFirebase(item: Meal) {
         itemsReference.child(item.timestamp.toString()).setValue(item)
     }
 
-    fun updateItem(item: Todo?, scope: CoroutineScope) {
+    fun updateItem(item: Meal?, scope: CoroutineScope) {
         item ?: return
         updateItemInRoom(item, scope)
         updateItemInFirebase(item)
     }
 
-    private fun updateItemInRoom(item: Todo, scope: CoroutineScope) {
-        if (isTodoValid(item)) {
+    private fun updateItemInRoom(item: Meal, scope: CoroutineScope) {
+        if (isMealValid(item)) {
             scope.launch {
-                todoDao.update(item)
+                mealDao.update(item)
             }
         }
     }
 
-    private fun updateItemInFirebase(item: Todo) {
+    private fun updateItemInFirebase(item: Meal) {
         itemsReference.child(item.timestamp.toString()).setValue(item)
     }
 
-    fun deleteItem(item: Todo?, scope: CoroutineScope) {
+    fun deleteItem(item: Meal?, scope: CoroutineScope) {
         item ?: return
         deleteItemInRoom(item.timestamp, scope)
         deleteItemInFirebase(item)
@@ -69,25 +69,25 @@ class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: Firebas
     private fun deleteItemInRoom(itemTimestamp: Long?, scope: CoroutineScope) {
         itemTimestamp ?: return
         scope.launch {
-            todoDao.delete(itemTimestamp)
+            mealDao.delete(itemTimestamp)
         }
     }
 
-    private fun deleteItemInFirebase(item: Todo) {
+    private fun deleteItemInFirebase(item: Meal) {
         itemsReference.child(item.timestamp.toString()).removeValue()
     }
 
     fun refreshFromFirebase(scope: CoroutineScope) {
         scope.launch {
-            todoDao.deleteAll()
+            mealDao.deleteAll()
             getAllItemsFromFirebase(scope)
         }
     }
 
-    suspend fun getItemByTimestamp(itemTimestamp: Long?, scope: CoroutineScope): Todo? {
+    suspend fun getItemByTimestamp(itemTimestamp: Long?, scope: CoroutineScope): Meal? {
         itemTimestamp ?: return null
         return withContext(scope.coroutineContext) {
-            todoDao.getItemByTimestamp(itemTimestamp)
+            mealDao.getItemByTimestamp(itemTimestamp)
         }
     }
 
@@ -95,9 +95,9 @@ class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: Firebas
         if (itemsEventListener == null) {
             itemsEventListener = object : ChildEventListener {
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                    val item = snapshot.getValue(Todo::class.java)
+                    val item = snapshot.getValue(Meal::class.java)
                     item?.let {
-                        val allTimestamps = todoDao.getAllTimestampts().value ?: listOf()
+                        val allTimestamps = mealDao.getAllTimestampts().value ?: listOf()
                         if (item.timestamp !in allTimestamps) {
                             addItemToRoom(item, coroutineScope)
                         }
@@ -105,9 +105,9 @@ class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: Firebas
                 }
 
                 override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                    val updatedTodo = snapshot.getValue(Todo::class.java)
-                    updatedTodo ?: return
-                    updateItemInRoom(updatedTodo, coroutineScope)
+                    val updatedMeal = snapshot.getValue(Meal::class.java)
+                    updatedMeal ?: return
+                    updateItemInRoom(updatedMeal, coroutineScope)
                 }
 
                 override fun onChildRemoved(snapshot: DataSnapshot) {
@@ -146,7 +146,7 @@ class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: Firebas
         itemsReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (itemSnapshot in dataSnapshot.children) {
-                    val item = itemSnapshot.getValue(Todo::class.java)
+                    val item = itemSnapshot.getValue(Meal::class.java)
                     item?.let {
                         addItemToRoom(it, coroutineScope)
                     }
@@ -161,9 +161,9 @@ class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: Firebas
 
 
     companion object {
-        const val TAG = "TodoProvider"
+        const val TAG = "MealProvider"
         const val ITEMS_KEY = "items"
-        const val TITLE_MAX_LENGTH = 30
-        const val DESCRIPTION_MAX_LENGTH = 200
+        const val TITLE_MAX_LENGTH = 40
+        const val DESCRIPTION_MAX_LENGTH = 500
     }
 }
