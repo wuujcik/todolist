@@ -9,9 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.paging.PagedList
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.wuujcik.todolist.R
 import com.wuujcik.todolist.databinding.FragmentListBinding
@@ -54,10 +52,6 @@ class ListFragment : Fragment() {
                 )
             )
         }
-
-//        binding.quickCreateButton.setOnClickListener {
-//            saveQuickItem()
-//        }
     }
 
     override fun onStop() {
@@ -93,7 +87,6 @@ class ListFragment : Fragment() {
             adapter = mealListAdapter
             layoutManager = LinearLayoutManager(this.context)
         }
-//        swipeToDelete()
     }
 
     private fun showDialog(item: Meal) {
@@ -109,56 +102,6 @@ class ListFragment : Fragment() {
             }
             .show()
     }
-
-    private fun swipeToDelete() {
-        ItemTouchHelper(object : ItemTouchHelper.Callback() {
-            override fun getMovementFlags(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder
-            ): Int =
-                makeMovementFlags(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
-
-            override fun onMove(
-                recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean = false
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                (viewHolder as MealListAdapter.TodoViewHolder).meal?.let {
-                    listViewModel.invalidateMeals()
-                    listViewModel.deleteMeal(it)
-                }
-            }
-        }).attachToRecyclerView(binding.listRecyclerViewer)
-    }
-
-
-//    private fun saveQuickItem() {
-//        val title = binding.title.text.textToTrimString()
-//        val timestamp = Date().time
-//        val item = Todo(title, "", timestamp, null)
-//
-//        if (!isTodoValid(item)) {
-//            showValidationErrors()
-//            return
-//        }
-//        listViewModel.createQuickItem(item)
-//        binding.title.setText("") // TODO: add verification of success and handle errors
-//    }
-//
-//    private fun showValidationErrors() {
-//        when {
-//            binding.title.text.textToTrimString().isEmpty() -> {
-//                binding.titleLayout.error = getString(R.string.error_field_empty)
-//            }
-//            binding.title.text.textToTrimString().length > TodoProvider.TITLE_MAX_LENGTH -> {
-//                binding.titleLayout.error = getString(R.string.error_field_too_long)
-//            }
-//            else -> {
-//                binding.titleLayout.error = null
-//            }
-//        }
-//    }
 
 
     companion object {

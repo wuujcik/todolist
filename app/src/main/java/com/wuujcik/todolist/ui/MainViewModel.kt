@@ -8,12 +8,6 @@ import javax.inject.Inject
 
 class MainViewModel @Inject constructor(private val mealProvider: MealProvider) : ViewModel() {
 
-    var themeId = R.style.Theme_Todo
-
-    fun changeTheme(resourceId: Int) {
-        themeId = resourceId
-    }
-
     fun refreshFromFirebase() {
         mealProvider.refreshFromFirebase(viewModelScope)
     }

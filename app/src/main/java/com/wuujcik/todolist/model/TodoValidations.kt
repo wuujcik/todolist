@@ -25,5 +25,9 @@ fun isMealValid(item: Meal?): Boolean {
         return false
     }
 
+    if (item.mealType == null) {
+        return false
+    }
+
     return true
 }

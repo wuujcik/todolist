@@ -38,8 +38,4 @@ class ListViewModel @Inject constructor(private val mealProvider: MealProvider) 
             mealProvider.detachDatabaseReadListener()
         }
     }
-
-    fun createQuickItem(item: Meal) {
-        mealProvider.addItem(item, viewModelScope)
-    }
 }

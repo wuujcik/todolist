@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
-        setTheme()
         setContentView(binding.root)
 
         if (database == null) {
@@ -45,12 +44,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun getTheme(): Resources.Theme {
-        val theme: Resources.Theme = super.getTheme()
-        theme.applyStyle(viewModel.themeId, true)
-        return theme
-    }
-
     private fun setupAppBarMenu() {
         binding.topAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
@@ -61,9 +54,5 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
-    }
-
-    private fun setTheme() {
-        setTheme(viewModel.themeId)
     }
 }

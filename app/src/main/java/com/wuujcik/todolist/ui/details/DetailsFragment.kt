@@ -2,7 +2,6 @@ package com.wuujcik.todolist.ui.details
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,10 +19,6 @@ import com.wuujcik.todolist.ui.MainActivity
 import com.wuujcik.todolist.utils.textToTrimString
 import java.util.*
 import javax.inject.Inject
-import android.widget.RadioButton
-
-
-
 
 
 class DetailsFragment : Fragment() {
@@ -123,8 +118,5 @@ class DetailsFragment : Fragment() {
             R.id.good_rb ->  2
             else -> null
         }
-    }
-    private fun selectRadioButton(index: Int){
-
     }
 }

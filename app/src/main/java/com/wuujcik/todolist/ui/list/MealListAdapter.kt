@@ -11,7 +11,6 @@ import coil.load
 import com.wuujcik.todolist.R
 import com.wuujcik.todolist.databinding.ItemMealBinding
 import com.wuujcik.todolist.persistence.Meal
-import com.wuujcik.todolist.utils.formatShortDate
 
 
 class MealListAdapter : PagedListAdapter<Meal, MealListAdapter.TodoViewHolder>(DIFF_CALLBACK) {
@@ -57,9 +56,6 @@ class MealListAdapter : PagedListAdapter<Meal, MealListAdapter.TodoViewHolder>(D
         fun bind(item: Meal) = with(binding) {
             meal = item
             title.text = item.title
-            item.timestamp?.let { date ->
-                dateCreated.text = formatShortDate(binding.root.context, date)
-            }
             when (item.mealType) {
                 0 -> {
                     iconImg.load(R.drawable.ic_test)
