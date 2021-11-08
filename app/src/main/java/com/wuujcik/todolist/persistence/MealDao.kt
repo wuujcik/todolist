@@ -8,7 +8,7 @@ import androidx.room.*
 @Dao
 interface MealDao {
 
-    @Query("SELECT * FROM meal ORDER BY timestamp ASC")
+    @Query("SELECT * FROM meal ORDER BY mealType ASC")
     fun getAll(): DataSource.Factory<Int, Meal>
 
     @Query("SELECT timestamp FROM meal")
