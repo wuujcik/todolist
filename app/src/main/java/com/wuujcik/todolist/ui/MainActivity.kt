@@ -3,6 +3,7 @@ package com.wuujcik.todolist.ui
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
@@ -11,6 +12,7 @@ import com.wuujcik.todolist.R
 import com.wuujcik.todolist.TodoListApp
 import com.wuujcik.todolist.databinding.ActivityMainBinding
 import com.wuujcik.todolist.di.MainActivityComponent
+import com.wuujcik.todolist.utils.internetAvailable
 import javax.inject.Inject
 
 
@@ -37,6 +39,10 @@ class MainActivity : AppCompatActivity() {
             database = Firebase.database
         }
         setupAppBarMenu()
+
+        if (internetAvailable(this.application)) {
+            viewModel.refreshFromFirebase()
+        }
     }
 
     override fun getTheme(): Resources.Theme {
@@ -49,7 +55,11 @@ class MainActivity : AppCompatActivity() {
         binding.topAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.menu_refresh -> {
-                    viewModel.refreshFromFirebase()
+                    if (internetAvailable(this.application)) {
+                        viewModel.refreshFromFirebase()
+                    } else {
+                        Toast.makeText(this,getString(R.string.no_internet), Toast.LENGTH_LONG)
+                    }
                     true
                 }
 //                R.id.menu_theme_standard -> {
