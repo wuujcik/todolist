@@ -37,6 +37,10 @@ class MainActivity : AppCompatActivity() {
             database = Firebase.database
         }
         setupAppBarMenu()
+
+        if (internetAvailable(this.application)) {
+            viewModel.refreshFromFirebase()
+        }
     }
 
     override fun getTheme(): Resources.Theme {
@@ -49,7 +53,11 @@ class MainActivity : AppCompatActivity() {
         binding.topAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.menu_refresh -> {
-                    viewModel.refreshFromFirebase()
+                    if (internetAvailable(this.application)) {
+                        viewModel.refreshFromFirebase()
+                    } else {
+                        Toast.makeText(this,getString(R.string.no_internet), Toast.LENGTH_LONG)
+                    }
                     true
                 }
 //                R.id.menu_theme_standard -> {
