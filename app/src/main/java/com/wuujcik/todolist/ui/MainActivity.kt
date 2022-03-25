@@ -3,6 +3,7 @@ package com.wuujcik.todolist.ui
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         }
         setupAppBarMenu()
 
-        if (internetAvailable(application as MealListApp)) {
+        if (internetAvailable(this.application)) {
             viewModel.refreshFromFirebase()
         }
     }
@@ -48,7 +49,11 @@ class MainActivity : AppCompatActivity() {
         binding.topAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.menu_refresh -> {
-                    viewModel.refreshFromFirebase()
+                    if (internetAvailable(this.application)) {
+                        viewModel.refreshFromFirebase()
+                    } else {
+                        Toast.makeText(this,getString(R.string.no_internet), Toast.LENGTH_LONG)
+                    }
                     true
                 }
                 else -> false

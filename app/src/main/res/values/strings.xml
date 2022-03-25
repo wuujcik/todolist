@@ -6,6 +6,7 @@
 
     <!-- drawer menu -->
     <string name="drawer_refresh">Refresh</string>
+    <string name="no_internet">You don\'t have internet!</string>
     <string name="drawer_theme_blue">Blue theme</string>
     <string name="drawer_theme_standard">Standard theme</string>
 
