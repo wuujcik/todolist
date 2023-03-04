@@ -12,9 +12,9 @@
         <item name="colorOnSecondary">@color/light_color_on_secondary</item>
 
         <!-- Status bar colors -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorSecondary</item>
         <item name="colorControlNormal">?attr/colorOnPrimary</item>
-        <item name="colorControlHighlight">?attr/colorPrimaryVariant</item>
+        <item name="colorControlHighlight">?attr/colorSecondary</item>
 
         <item name="toolbarStyle">@style/ToolbarStyle</item>
         <item name="backgroundColor">?attr/colorPrimaryVariant</item>
@@ -24,7 +24,7 @@
     <style name="ToolbarStyle" parent="@style/Widget.AppCompat.Toolbar">
         <!-- Makes the toolbar text whatever color you want for both light/dark-->
         <item name="titleTextColor">?attr/colorOnPrimary</item>
-        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:background">?attr/colorSecondary</item>
     </style>
 
     <style name="Theme.Todo.NoActionBar">
@@ -34,6 +34,15 @@
 
     <style name="AlertDialog" parent="android:Theme.Material.Dialog.Alert">
         <item name="android:colorPrimary">?attr/colorOnPrimary</item>
+    </style>
+
+    <style name="Todo.RecyclerList.QuickCreateButton" parent="Widget.MaterialComponents.TimePicker.ImageButton">
+        <item name="android:padding">@dimen/standard_padding</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:scaleType">center</item>
+        <item name="tint">?attr/colorAccent</item>
+        <item name="backgroundTint">?attr/background</item>
     </style>
 
 </resources>

@@ -12,35 +12,35 @@
         <item name="android:textColorSecondary">#1f0103</item>
     </style>
 
-    <style name="Todo.Button"  parent="Widget.MaterialComponents.Button" >
+    <style name="Todo.Button" parent="Widget.MaterialComponents.Button">
         <item name="android:layout_margin">@dimen/standard_margin</item>
         <item name="backgroundTint">?attr/colorAccent</item>
     </style>
 
 
-    <style name="Todo.RecyclerList" >
+    <style name="Todo.RecyclerList">
         <item name="android:layout_margin">@dimen/micro_margin</item>
         <item name="android:background">?attr/backgroundColor</item>
     </style>
 
-    <style name="Todo.RecyclerList.Title" >
+    <style name="Todo.RecyclerList.Title">
         <item name="android:layout_margin">@dimen/small_margin</item>
-        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Subtitle1</item>
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Subtitle1
+        </item>
         <item name="android:textColor">?attr/colorOnBackground</item>
+        <item name="android:paddingStart">@dimen/inner_padding</item>
+        <item name="android:paddingEnd">@dimen/inner_padding</item>
         <item name="android:paddingTop">@dimen/inner_padding</item>
     </style>
 
-    <style name="Todo.RecyclerList.Date" >
+    <style name="Todo.RecyclerList.Description">
         <item name="android:layout_margin">@dimen/small_margin</item>
-        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Body2</item>
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Overline</item>
         <item name="android:textColor">?attr/colorOnBackground</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:paddingStart">@dimen/inner_padding</item>
+        <item name="android:paddingEnd">@dimen/inner_padding</item>
         <item name="android:paddingBottom">@dimen/inner_padding</item>
-    </style>
-
-    <style name="Todo.RecyclerList.Icon" >
-        <item name="android:layout_margin">@dimen/small_margin</item>
-        <item name="android:layout_width">@dimen/icon_img_size</item>
-        <item name="android:layout_height">@dimen/icon_img_size</item>
     </style>
 
     <style name="Todo.RecyclerList.FloatingButton" parent="Widget.MaterialComponents.FloatingActionButton">
@@ -54,22 +54,14 @@
         <item name="backgroundTint">?attr/colorAccent</item>
     </style>
 
-    <style name="Todo.RecyclerList.QuickCreateButton" parent="Widget.MaterialComponents.TimePicker.ImageButton">
-        <item name="android:padding">@dimen/standard_padding</item>
-        <item name="android:clickable">true</item>
-        <item name="android:focusable">true</item>
-        <item name="android:scaleType">center</item>
-        <item name="tint">?attr/colorSecondary</item>
-        <item name="backgroundTint">?attr/background</item>
-    </style>
-
     <style name="Todo.Details">
         <item name="android:background">?attr/background</item>
     </style>
 
-    <style name="Todo.Details.Layout" >
+    <style name="Todo.Details.Layout">
         <item name="hintTextColor">?attr/colorOnPrimary</item>
-        <item name="android:textColorHint">?attr/colorSecondary</item>
+        <item name="android:textColorHint">?attr/colorSecondaryVariant</item>
+        <item name="counterTextColor">?attr/colorAccent</item>
     </style>
 
 </resources>

@@ -54,14 +54,14 @@ class TodoListAdapter : PagedListAdapter<Todo, TodoListAdapter.TodoViewHolder>(D
         fun bind(item: Todo) = with(binding) {
             todo = item
             title.text = item.title
-            item.timestamp?.let { date ->
-                dateCreated.text = formatShortDate(binding.root.context, date)
+
+            if(item.description.isNullOrEmpty()) {
+                description.visibility = View.GONE
+            }  else {
+                description.visibility = View.VISIBLE
+                description.text = item.description
             }
-            if (item.iconUrl != null && item.iconUrl != "") {
-                iconImg.load(item.iconUrl)
-            } else {
-                iconImg.load(  R.drawable.ic_placeholder)
-            }
+
 
             binding.root.setOnLongClickListener {
                 onItemLongClicked(item)

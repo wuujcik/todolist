@@ -163,7 +163,7 @@ class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: Firebas
     companion object {
         const val TAG = "TodoProvider"
         const val ITEMS_KEY = "items"
-        const val TITLE_MAX_LENGTH = 30
-        const val DESCRIPTION_MAX_LENGTH = 200
+        const val TITLE_MAX_LENGTH = 80
+        const val DESCRIPTION_MAX_LENGTH = 400
     }
 }

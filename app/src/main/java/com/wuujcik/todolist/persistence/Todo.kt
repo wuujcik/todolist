@@ -17,7 +17,4 @@ data class Todo(
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "timestamp")
     var timestamp: Long? = null,
-
-    @ColumnInfo(name = "iconUrl")
-    var iconUrl: String? = null
 ) : Serializable

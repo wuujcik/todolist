@@ -60,24 +60,6 @@
                     android:nextFocusForward="@+id/surnameText" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/icon_layout"
-                style="@style/Todo.Details.Layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/description_layout">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/icon"
-                    style="@style/Todo.Details"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/icon_hint"
-                    android:nextFocusForward="@+id/surnameText" />
-            </com.google.android.material.textfield.TextInputLayout>
-
         </LinearLayout>
     </ScrollView>
 

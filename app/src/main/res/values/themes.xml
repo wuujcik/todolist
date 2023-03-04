@@ -1,4 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <style name="Theme.Todo" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/light_color_primary</item>
@@ -34,6 +35,15 @@
 
     <style name="AlertDialog" parent="android:Theme.Material.Light.Dialog.Alert">
         <item name="android:colorPrimary">?attr/colorOnPrimary</item>
+    </style>
+
+    <style name="Todo.RecyclerList.QuickCreateButton" parent="Widget.MaterialComponents.TimePicker.ImageButton">
+        <item name="android:padding">@dimen/standard_padding</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:scaleType">center</item>
+        <item name="tint">?attr/colorPrimaryVariant</item>
+        <item name="backgroundTint">?attr/background</item>
     </style>
 
 </resources>
