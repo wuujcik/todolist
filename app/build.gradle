@@ -14,8 +14,8 @@ android {
         applicationId "com.wuujcik.todolist"
         minSdkVersion 23
         targetSdkVersion 31
-        versionCode 210200
-        versionName "21.02.00"
+        versionCode 230300
+        versionName "23.03.00"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
