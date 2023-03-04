@@ -21,13 +21,4 @@
     <color name="dark_color_on_secondary">#fffdfd</color>
     <color name="dark_color_accent">#99644E</color>
 
-    <!-- new theme -->
-    <color name="new_color_primary">#A4D6ED</color>
-    <color name="new_color_primary_variant">#4BC1CA</color>
-    <color name="new_color_on_primary">#00262B</color>
-    <color name="new_color_secondary">#2E7B85</color>
-    <color name="new_color_secondary_variant">#14363A</color>
-    <color name="new_color_on_secondary">#ffffff</color>
-    <color name="new_color_for_tiles">#EEF4F4</color>
-    <color name="new_color_accent">#E7F3F4</color>
 </resources>
