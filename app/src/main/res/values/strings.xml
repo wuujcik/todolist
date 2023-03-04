@@ -17,7 +17,7 @@
 
     <!-- list -->
     <string name="failed_to_load_todos">Failed to load the list.</string>
-    <string name="quick_task_hint">Add a task</string>
+    <string name="quick_task_hint">Add an item</string>
 
     <!-- dialogs -->
     <string name="delete">Delete</string>
