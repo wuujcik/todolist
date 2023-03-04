@@ -19,7 +19,6 @@ import com.wuujcik.todolist.model.TodoProvider
 import com.wuujcik.todolist.model.isTodoValid
 import com.wuujcik.todolist.persistence.Todo
 import com.wuujcik.todolist.ui.MainActivity
-import com.wuujcik.todolist.utils.hideKeyboard
 import com.wuujcik.todolist.utils.textToTrimString
 import java.util.*
 import javax.inject.Inject
@@ -73,7 +72,7 @@ class ListFragment : Fragment() {
     private fun setListAdapter() {
         todoListAdapter = TodoListAdapter()
 
-        listViewModel.allTodos.observe(viewLifecycleOwner, { list: PagedList<Todo>? ->
+        listViewModel.allTodos.observe(viewLifecycleOwner) { list: PagedList<Todo>? ->
             todoListAdapter?.apply {
                 placeholderView = binding.emptyRecyclerView
                 submitList(list)
@@ -93,7 +92,7 @@ class ListFragment : Fragment() {
                 }
             }
 
-        })
+        }
         with(binding.listRecyclerViewer) {
             adapter = todoListAdapter
             layoutManager = LinearLayoutManager(this.context)
@@ -141,7 +140,7 @@ class ListFragment : Fragment() {
     private fun saveQuickItem() {
         val title = binding.title.text.textToTrimString()
         val timestamp = Date().time
-        val item = Todo(title, "", timestamp, null)
+        val item = Todo(title, "", timestamp)
 
         if (!isTodoValid(item)) {
             showValidationErrors()

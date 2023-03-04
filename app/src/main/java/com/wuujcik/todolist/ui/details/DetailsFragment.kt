@@ -54,7 +54,6 @@ class DetailsFragment : Fragment() {
             editingMode = true
             binding.title.setText(item.title)
             binding.description.setText(item.description)
-            binding.icon.setText(item.iconUrl)
         }
         binding.cancelButton.setOnClickListener { findNavController().navigateUp() }
         binding.saveButton.setOnClickListener { saveItem() }
@@ -64,9 +63,8 @@ class DetailsFragment : Fragment() {
     private fun saveItem() {
         val title = binding.title.text.textToTrimString()
         val description = binding.description.text.textToTrimString()
-        val iconUrl = binding.icon.text.textToTrimString()
         val timestamp = originalItem?.timestamp ?: Date().time
-        val item = Todo(title, description, timestamp, iconUrl)
+        val item = Todo(title, description, timestamp)
 
         if (!isTodoValid(item)) {
             validateFields()

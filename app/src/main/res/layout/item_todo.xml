@@ -7,45 +7,32 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/micro_margin">
 
-    <ImageView
-        android:id="@+id/icon_img"
-        style="@style/Todo.RecyclerList.Icon"
-        android:src="@drawable/ic_placeholder"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="1"
-        app:layout_constraintEnd_toEndOf="@+id/guideline1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"
         style="@style/Todo.RecyclerList.Title"
+        android:maxLines="2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/date_created"
+        android:paddingBottom="@dimen/inner_padding"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline1"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Buy peanut butter" />
 
+
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/date_created"
-        style="@style/Todo.RecyclerList.Date"
+        android:id="@+id/description"
+        android:maxLines="1"
+        android:ellipsize="end"
+        style="@style/Todo.RecyclerList.Description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline1"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title"
-        tools:text="2020-02-18" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.18" />
+        tools:text="the crunchy one" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
