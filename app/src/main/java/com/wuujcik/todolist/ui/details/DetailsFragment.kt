@@ -1,6 +1,5 @@
 package com.wuujcik.todolist.ui.details
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,17 +11,15 @@ import com.wuujcik.todolist.R
 import com.wuujcik.todolist.databinding.FragmentDetailsBinding
 import com.wuujcik.todolist.model.TodoProvider.Companion.DESCRIPTION_MAX_LENGTH
 import com.wuujcik.todolist.model.TodoProvider.Companion.TITLE_MAX_LENGTH
-import com.wuujcik.todolist.persistence.Todo
 import com.wuujcik.todolist.model.isTodoValid
-import com.wuujcik.todolist.ui.MainActivity
+import com.wuujcik.todolist.persistence.Todo
 import com.wuujcik.todolist.utils.textToTrimString
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
-import javax.inject.Inject
 
 class DetailsFragment : Fragment() {
 
-    @Inject
-    lateinit var detailsViewModel: DetailsViewModel
+    private val detailsViewModel: DetailsViewModel by viewModel()
 
     private lateinit var binding: FragmentDetailsBinding
 
@@ -30,12 +27,6 @@ class DetailsFragment : Fragment() {
     private val args: DetailsFragmentArgs by navArgs()
     private var editingMode = false
 
-
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        (activity as MainActivity).mainActivityComponent.inject(this)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -1,6 +1,5 @@
 package com.wuujcik.todolist.ui
 
-import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Toast
@@ -9,29 +8,21 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.wuujcik.todolist.R
-import com.wuujcik.todolist.TodoListApp
 import com.wuujcik.todolist.databinding.ActivityMainBinding
-import com.wuujcik.todolist.di.MainActivityComponent
 import com.wuujcik.todolist.utils.internetAvailable
-import javax.inject.Inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MainActivity : AppCompatActivity() {
 
-    @Inject  lateinit var viewModel: MainViewModel
-    lateinit var mainActivityComponent: MainActivityComponent
+    private val viewModel: MainViewModel by viewModel()
     private lateinit var binding: ActivityMainBinding
     private var database: FirebaseDatabase? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        mainActivityComponent =
-            (application as TodoListApp).appComponent.mainActivityComponent().create()
-        mainActivityComponent.inject(this)
-
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
-        setTheme()
         setContentView(binding.root)
 
         if (database == null) {
@@ -45,12 +36,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun getTheme(): Resources.Theme {
-        val theme: Resources.Theme = super.getTheme()
-        theme.applyStyle(viewModel.themeId, true)
-        return theme
-    }
-
     private fun setupAppBarMenu() {
         binding.topAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
@@ -58,16 +43,12 @@ class MainActivity : AppCompatActivity() {
                     if (internetAvailable(this.application)) {
                         viewModel.refreshFromFirebase()
                     } else {
-                        Toast.makeText(this,getString(R.string.no_internet), Toast.LENGTH_LONG)
+                        Toast.makeText(this, getString(R.string.no_internet), Toast.LENGTH_LONG)
                     }
                     true
                 }
                 else -> false
             }
         }
-    }
-
-    private fun setTheme() {
-        setTheme(viewModel.themeId)
     }
 }

@@ -5,13 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagedList
 import androidx.paging.toLiveData
-import com.wuujcik.todolist.persistence.*
 import com.wuujcik.todolist.model.TodoProvider
+import com.wuujcik.todolist.persistence.Todo
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 
-class ListViewModel @Inject constructor(private val todoProvider: TodoProvider) : ViewModel() {
+class ListViewModel (private val todoProvider: TodoProvider) : ViewModel() {
 
 
     val allTodos: LiveData<PagedList<Todo>> = todoProvider.getAll.toLiveData(30)

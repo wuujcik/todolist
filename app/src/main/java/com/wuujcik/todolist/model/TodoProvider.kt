@@ -1,22 +1,15 @@
 package com.wuujcik.todolist.model
 
 import android.util.Log
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.wuujcik.todolist.di.ActivityScope
+import com.google.firebase.database.*
 import com.wuujcik.todolist.persistence.Todo
 import com.wuujcik.todolist.persistence.TodoDao
 import com.wuujcik.todolist.ui.list.ListFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-@ActivityScope
-class TodoProvider @Inject constructor(val todoDao: TodoDao, firebaseDb: FirebaseDatabase) {
+class TodoProvider(val todoDao: TodoDao, firebaseDb: FirebaseDatabase) {
 
     private var itemsEventListener: ChildEventListener? = null
     private val itemsReference = firebaseDb.reference.child(ITEMS_KEY)

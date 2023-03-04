@@ -13,11 +13,12 @@
     <!-- item details -->
     <string name="title_hint">Set your task</string>
     <string name="description_hint">Add description</string>
-    <string name="icon_hint">Add icon url address</string>
 
     <!-- list -->
     <string name="failed_to_load_todos">Failed to load the list.</string>
     <string name="quick_task_hint">Add an item</string>
+    <string name="snack_bar_text_delete">You deleted %1$s</string>
+    <string name="snack_bar_undo">UNDO</string>
 
     <!-- dialogs -->
     <string name="delete">Delete</string>

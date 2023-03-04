@@ -1,7 +1,6 @@
 package com.wuujcik.todolist.ui.list
 
 import android.app.AlertDialog
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,23 +17,19 @@ import com.wuujcik.todolist.databinding.FragmentListBinding
 import com.wuujcik.todolist.model.TodoProvider
 import com.wuujcik.todolist.model.isTodoValid
 import com.wuujcik.todolist.persistence.Todo
-import com.wuujcik.todolist.ui.MainActivity
 import com.wuujcik.todolist.utils.textToTrimString
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
-import javax.inject.Inject
 
 
 class ListFragment : Fragment() {
 
-    @Inject  lateinit var listViewModel: ListViewModel
+    private val listViewModel: ListViewModel by viewModel()
     private var todoListAdapter: TodoListAdapter? = null
 
     private lateinit var binding: FragmentListBinding
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        (activity as MainActivity).mainActivityComponent.inject(this)
-    }
+    private var recentlyDeletedItem: Todo? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -129,13 +124,30 @@ class ListFragment : Fragment() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 (viewHolder as TodoListAdapter.TodoViewHolder).todo?.let {
+                    recentlyDeletedItem = it
                     listViewModel.invalidateTodos()
                     listViewModel.deleteTodo(it)
+                    showUndoSnackbar()
                 }
             }
         }).attachToRecyclerView(binding.listRecyclerViewer)
     }
 
+    private fun showUndoSnackbar() {
+        val text = getString(R.string.snack_bar_text_delete, recentlyDeletedItem?.title)
+        val snackbar: Snackbar = Snackbar.make(
+            binding.root, text,
+            Snackbar.LENGTH_LONG
+        )
+        snackbar.setAction(R.string.snack_bar_undo) { v ->
+            recentlyDeletedItem?.let {
+                listViewModel.createQuickItem(
+                    it
+                )
+            }
+        }
+        snackbar.show()
+    }
 
     private fun saveQuickItem() {
         val title = binding.title.text.textToTrimString()
